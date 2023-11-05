@@ -1,0 +1,104 @@
+.body{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    @font-face {
+        font-family: Trebuchet;
+        src: url();
+    }
+}
+nav
+{
+    height: fit-content;
+    width: fit-content;
+
+    color: rgb(30, 255, 0);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: xx-large;
+    padding-bottom: .7%;
+    border-color: rgb(30, 255, 0) solid;
+    
+}
+
+body
+{
+    background: linear-gradient( slateblue, rgb(255, 79, 109));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.topnav{
+    border-bottom: .127rem solid;
+    color: rgb(30, 255, 0);
+}
+
+#h1{
+    
+    color: rgb(30, 255, 0);
+    align-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: x-large;
+    font-weight: 500;
+    border: .127rem outset;
+    left: 48%;
+    width: fit-content;
+    border-radius: 5px;
+    position: relative;
+    font-style: oblique;
+}
+
+#passwordy{
+    color: rgb(30, 255, 0);
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+}
+
+#passwordyy{
+    color: rgb(30, 255, 0);
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: x-large;
+    
+}
+
+#usernamey{
+    color: rgb(30, 255, 0);
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+}
+
+#usernameyy{
+    color: rgb(30, 255, 0);
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: x-large;
+    padding-bottom: 0%;
+    padding-top: 0%;
+    justify-content: center;
+    
+}
+
+#logbut{
+    
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    
+    border: .127rem inset;
+    border-radius: 5px;
+    text-align: right;
+    position: fixed;
+    left: 48%;
+    width: fit-content;
+    display: inline;
+}
+
+#makeacc{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    justify-self: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    padding-top: 3%;
+}
