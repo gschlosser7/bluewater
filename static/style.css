@@ -1,8 +1,7 @@
-.body{
+body{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     @font-face {
         font-family: Trebuchet;
-        src: url();
     }
 }
 nav
@@ -25,10 +24,13 @@ body
     background-attachment: fixed;
 }
 
+
 .topnav{
     border-bottom: .127rem solid;
     color: rgb(30, 255, 0);
 }
+
+
 
 #h1{
     

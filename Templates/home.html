@@ -29,10 +29,10 @@
     </form>
 
     
-    <a id="makeacc" href="{{url_for('register')}}">Need to make an account?</a><br>
+    <a id="makeacc" href="../Templates/register.html">Need to make an account?</a><br>
     
     {% block content %}
-        <h1>{% block title %} Posts {% endblock %}</h1>
+        <h1 style="font: Verdana; font-size: 35pt; margin-left: 20%;">{% block title %} news {% endblock %}</h1>
         {% for post in posts %}
             <div class='post'>
                 <p>{{ post['created'] }}</p>
