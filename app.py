@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, redirect, request
-import json
+
 from flask_sqlalchemy import SQLAlchemy, table
 import os
 from marshmallow import Schema
@@ -18,7 +18,7 @@ bcrypt = Bcrypt(app)
 
 url = os.getenv('DATABASE_URL')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Fullstackgamer1@localhost/moneybase'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost/moneybase'
 app.config['SECRET_KEY'] = 'secretkey'
 
 db = SQLAlchemy(app)
