@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$$ moneybot $$</title>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">moneybot.cc</div>
+    </nav>
+    <div class="topnav"></div>
+
+    <h1 id="h1">Login</h1>
+
+    <!--<p id="usernamey">Username </p>
+    <p action="/submitid="usernameyy" style="text-indent: 0em;"><input type="text" name="username" required="required" /> </p>
+    <p id="passwordy">Password </p>
+    <p id="passwordyy" style="text-indent: 0em;"><input type="password" name="password" required="required" /> </p>
+    -->
+    <form action="/submit" method="POST">
+        <label for="username">username</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">password</label><br>
+        <input type="text" id="password" name="password">
+
+        <button> <a>sign in</a></button><br><br>
+    </form>
+
+    
+    <a id="makeacc" href="../Templates/register.html">Need to make an account?</a><br>
+    
+    {% block content %}
+        <h1 style="font: Verdana; font-size: 35pt; margin-left: 20%;">{% block title %} news {% endblock %}</h1>
+        {% for post in posts %}
+            <div class='post'>
+                <p>{{ post['created'] }}</p>
+                <h2>{{ post['title'] }}</h2>
+                <p>{{ post['content'] }}</p>
+            </div>
+        {% endfor %}
+    {% endblock %}
+
+</body>
+
+</html>
