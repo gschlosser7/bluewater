@@ -41,12 +41,12 @@ app = Flask(__name__)
 #dash = Dash(__name__)
 
 #class serverCfg(object):
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Fullstackgamer1@localhost/moneybase'
-app.config['SECRET_KEY'] = 'secretkey'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost/moneybase'
+app.config['SECRET_KEY'] = ''
 app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = None
 #SESSION_COOKIE_SECURE and REMEMBER_COOKIE_SECURE = True
-ACCESS_TOKEN = 'CG-6bShTxN27LWFuf4HGdxpqchb'
+ACCESS_TOKEN = 'CG-'
 #server.config.update(
  #   SECRET_KEY=os.urandom(12),
   #  SQLALCHEMY_DATABASE_URI=config.get('database', 'con'),
