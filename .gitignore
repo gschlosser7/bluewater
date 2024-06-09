@@ -1,0 +1,9 @@
+moneyenv/
+moneybase/
+schema.sql
+grab.py
+notes.py
+__pycache__/
+.
+../moneybotcc/
+./moneybotcc/

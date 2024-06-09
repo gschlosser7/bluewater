@@ -1,0 +1,327 @@
+head{
+  position: fixed;
+}
+nav
+{
+    display: inline-block;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 200;
+    border-bottom: .127rem solid;
+    color: #0080FF;
+    align-items: center;
+    width: 100%;
+    border: .5rem outset;
+    border-bottom-right-radius: 5px;
+    border-top: unset;
+    border-left: unset;
+    margin-left: 0rem;
+    position: sticky;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+.dropdown{
+  background-color: #9c242400;
+}
+
+.dropdown-menu{
+  background-color: #9c242400;
+}
+:root {
+    --s: 6;
+    --h: 8;
+    --speed:4s;
+
+  }
+  #newsbar {
+    width: 300px;
+    height: calc(var(--h) * .2rem);
+    color: rgb(77, 77, 77);
+  }
+  #ulnews {
+    display: flex;
+    flex-direction: column;
+    animation: move calc(var(--speed) * var(--s)) steps(var(--s)) infinite;
+  }
+  #linews{
+
+    animation: liMove calc(var(--speed)) infinite;
+  }
+  @keyframes move {
+    0% {
+      transform: translate(0, 0);
+    }
+    100%{
+      transform: translate(0, var(--h));
+    }
+    100% {
+      transform: translate(0, calc(var(--s) * var(--h) * -2px));
+    }
+  }
+
+body{
+    min-height:100vh;
+    width: 100%;
+    display: -ms-flexbox;
+    background: linear-gradient( rgba(0, 0, 0, 0.959), rgba(0, 0, 0, 0.932));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #b61515;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgb(218, 31, 31);
+  z-index: 1;
+}
+
+footer {
+    position: fixed; /* or - absolute - */
+    width: max-content;
+    height: 60px;
+    bottom: 0;
+    background: #00000000;
+    display: flex;
+    color: #000;
+  }
+
+
+
+.table {
+  font-size: smaller;
+  border: #000 2px;
+  
+  margin-top: 4rem;
+}
+.table tbody{
+  font-size: smaller;
+  border: #141414 2px solid;
+  border-radius: 1rem;
+  color: #0080FF;
+  
+  
+
+}
+.table tbody tr{
+    background-color: rgb(5, 5, 5);
+    color: #0080FF;
+    border-color: #141414b6;
+    font-size: x-large;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-style: italic;
+}
+
+#watchheader{
+  color: rgb(77, 77, 77);
+}
+#chartarea{
+  flood-color: blueviolet;
+  accent-color: rgb(51, 199, 51);
+  outline-color: rgb(186, 202, 41);
+  position: sticky;
+}
+
+#watchlist{
+  margin-top: 1rem;
+  margin-left: 3rem;
+  position: -webkit-sticky; 
+  position: relative;
+  top: 0;
+  font-family:monospace;
+  z-index: 1; 
+  background: rgb(10, 10, 10);
+    color:  rgba(0, 60, 255, 0.205);
+    width: min-content;
+    height: max-content;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: x-large;
+    font-weight: 300;
+    border: .5rem outset;
+    border-radius: 5px;
+    
+    overflow-y: scroll;
+    
+}
+.nav-tabs .nav-item .nav-link.active {
+  color: #777;
+}
+.card{
+  opacity: 0%;
+  border: 0px;
+  color: #000;
+}
+.nav-tabs {
+  
+  padding-bottom: .33rem;
+}
+
+.nav-tabs .nav-item .nav-link.active{
+  color: #0080FF;
+  background-color: #000;
+}
+.nav-tabs .nav-item .nav-link {
+  background-color: #070707;
+  color: #777;
+  border:2px;
+  font-size: large;
+  &:hover{
+    color:#2793ff;
+    background-color: #111111;
+  
+  }
+}
+#watchtable{
+  box-shadow: 0 0 0 2px #162a57d0;
+  border-radius: .1rem;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    margin-top: .5rem;
+
+    border-radius: 1rem;
+    background: linear-gradient(to right, rgba(14,14,14), rgba(0, 60, 255, 0.205));
+  }
+}
+#priceper{
+  visibility: hidden;
+}
+#mytotal{
+  font-size: small;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.gradient-box{
+  height: 50%;
+  color: #777;
+  
+  background: #080808;
+  border-radius: .1rem;
+  margin-bottom: 10px;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    margin-top: .5rem;
+
+    border-radius: 1rem;
+    background: linear-gradient(to left, rgba(14,14,14), rgba(0, 60, 255, 0.205));
+  }
+}
+#placeorder{
+  color:#0080FF;
+  background-color: #141414;
+  border: 0px;
+  border-radius: .5rem;
+  font-size: large;
+}
+#myid{
+  background-color: #707070;
+  color: #141414;
+  border: unset;
+}
+container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+passwordy{
+    color: rgb(30, 255, 0);
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+}
+
+passwordyy{
+    color: rgb(30, 255, 0);
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: x-large;
+}
+
+usernamey{
+    color: rgb(30, 255, 0);
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+}
+
+usernameyy{
+    color: rgb(30, 255, 0);
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: x-large;
+    padding-bottom: 0%;
+    padding-top: 0%;
+    justify-content: center;
+    
+}
+
+logbut{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    
+    border: .127rem inset;
+    border-radius: 5px;
+    text-align: right;
+    position: fixed;
+    left: 48%;
+    width: fit-content;
+    display: inline;
+}
+
+makeacc{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    justify-self: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    padding-top: 3%;
+}
+
+@media (max-width:600px) {
+  .wrapper-main{
+    width:100%
+    
+  }
+}
+
+@media (max-width:601px) {
+  .wrapper-main{
+    width:30%
+    
+  }
+}
+
+@media (max-width:768px) {
+  .wrapper-main{
+    width:30%
+    
+  }
+}
+
+@media (max-width:992px) {
+  .wrapper-main{
+    width:100%
+    
+  }
+}
+@media (max-width:1200px) {
+  .wrapper-main{
+    width:100%
+    
+  }
+}

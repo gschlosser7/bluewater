@@ -3,45 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$$ moneybot $$</title>
-    <link rel="stylesheet" type="text/css" href="../static/style.css">
+
+
+    <title>optionsBot</title>
+    <link rel="stylesheet" type="text/css" href="../static/loggedin.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
 </head>
-<body>
-    <nav>
-        <div class="logo">moneybot.cc</div>
+<body style="margin-bottom: 256px;">
+
+    <nav style="border-right-style: unset;">
+        <div class="logo" style="font-style: italic">spitball.io</div>
+        <div class="logo" style="font-size: 16px; padding-top:5px; font-size: medium; margin-inline-start: 3%; opacity: 80%; color: rgb(255, 36, 244); filter: contrast(100%); filter: blur(.03rem)">winning is good for your health</div>
+        
     </nav>
+    <a href="/logout" style="padding-left: 95%;">logout</a>
+
+
+    {% for user in users %}
+        <tr>
+            <td>{{user.id}}</td>
+        </tr>
+    
+    {% endfor %}
+    {{username}}
+    {% if 'username' in session %}
+    <tr><td>{{session['username']}}</td></tr>
+    {% endif %}
+
     <div class="topnav"></div>
+    <div class="low-opacity-bg-image">
 
-    <h1 id="h1">Login</h1>
 
-    <!--<p id="usernamey">Username </p>
-    <p action="/submitid="usernameyy" style="text-indent: 0em;"><input type="text" name="username" required="required" /> </p>
-    <p id="passwordy">Password </p>
-    <p id="passwordyy" style="text-indent: 0em;"><input type="password" name="password" required="required" /> </p>
-    -->
-    <form action="/submit" method="POST">
-        <label for="username">username</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">password</label><br>
-        <input type="text" id="password" name="password">
+        <h1 id="h1" style="font-size: 44px;">Login</h1>
 
-        <button> <a>sign in</a></button><br><br>
-    </form>
-
-    
-    <a id="makeacc" href="../Templates/register.html">Need to make an account?</a><br>
-    
-    {% block content %}
-        <h1 style="font: Verdana; font-size: 35pt; margin-left: 20%;">{% block title %} news {% endblock %}</h1>
-        {% for post in posts %}
-            <div class='post'>
-                <p>{{ post['created'] }}</p>
-                <h2>{{ post['title'] }}</h2>
-                <p>{{ post['content'] }}</p>
+        <h2>
+            
+            <div class = 'shadow p-3 mb-5 bg-body rounded'></div>
+                <form method="POST" action="/" align="low-opacity-bg-image" style="border: rgb(77, 77, 77) .33rem solid;width:fit-content; align-content: center; margin: 0 auto; 
+                color:rgb(44, 44, 44); padding: 33px; border-radius: 1rem; grid:10%">
+                    {{ form.csrf_token }}
+                    {{form.hidden_tag()}}
+                    {{form.username.label(class='form-label')}}
+                    {{ form.username(class='form') }}
+                    <br>
+                    {{ form.csrf_token }}
+                    {{ form.password.label(class='form-label')}}
+                    {{ form.password(class='form') }}
+                    <br>
+                    <input type="submit" value="Login" style="margin-left: 50%; font-size: smaller; background-color: rgb(77,77,77); border: 0px; border-radius: .33rem;">
+                </form>
             </div>
-        {% endfor %}
-    {% endblock %}
+            <div id="logform" class="contact-form">
+                    <form action="/" method="POST" class="form-horizontal" role="form" align="low-opacity-bg-image" style="border: rgb(77, 77, 77) 1px groove;width:fit-content; align-content: center; margin: 0 auto; border-top-style:unset; 
+                                color:rgb(44, 44, 44); border-bottom-style:unset; padding: 33px; border-radius: 12%; grid:10%">
+                        <div class="form-group" align="center"></div>
+                        
+                        <label class="control-label col-sm-2" for="username"->username</label><br><br>
+                        <input type="text" id="username" name="username"><br><br>
+                        <label for="password" style=" border-radius: 5%;">password</label><br><br>
+                        <input type="text" id="password" name="password"><br><br><br>
 
+                        <button style="color: rgb(255, 230, 0); font-size: 16px; background-color: transparent; font-style: italic; border-color: rgb(252, 177, 65); border-top-style: unset; border-right: unset; border-bottom: 2px groove; 
+                        border-left-width: 4px; border-left-style: ridge; text-indent: -3%; border-right-style: solid double outset; border-style: double ; filter: brightness(90%); box-shadow: rgb(251, 255, 0); text-align: left; border-top-left-radius: 15%; border-top-right-radius:15%; border-bottom-left-radius: 15%; border-bottom-right-radius: 20%;"> 
+                            <a>sign in</a>
+                        </button><br><br>
+                    </form>
+                    
+            </div>
+        </h2>
+        <a id="makeacc" action="/register" href="register">Need to make an account?</a><br><br>
+        
+    </div>
+
+    <div id="divbottom" style="border: .1rem outset;"></div><br>
+    <h3 style="color: rgb(255, 212, 69); font-family: Verdana, Geneva, Tahoma, sans-serif; font-style: italic; font-size: 35pt;">Leaderboards</h3>
+        
 </body>
 
 </html>

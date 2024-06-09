@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$$ moneybot $$</title>
+    <link rel="stylesheet" type="text/css" href="../static/loggedin.css">
+</head>
+
+
+
+<body style="margin-bottom: 256px;">
+
+    <nav>
+        <div class="logo" style="font-style: italic;">optionsBOT.MONEY</div>
+        <div class="logo" style="font-size: 16px; padding-top:5px; font-size: medium; margin-inline-start: 3%; opacity: 80%; color: rgb(255, 36, 244); filter: contrast(100%); filter: blur(.03rem)">winning is good for your health</div>
+        <nav style="padding-left: 33%;">
+            <a href="/forum" style="padding-inline-start: 99%;">forum</a>
+        </nav>
+    </nav>
+    <a href="/logout" style="padding-left: 95%;">logout</a>
+
+    {% if current_user.is_authenticated %}
+    <div class="card">
+        <div class="card-wrapper" style="border: rgb(77, 77, 77) 1px groove;width:fit-content; align-content: center; margin: 0 auto; border-top-style:unset; 
+        color:rgb(44, 44, 44); border-bottom-style:unset; padding: 33px; border-radius: 12%; grid:10%">
+            <small>username:</small>
+            {{current_user.username}}
+            <br>
+            <small>current score:</small>
+            <br>
+            <small>bio: </small> Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quos laborum sed cupiditate fugiat qui pariatur tempora deserunt similique quaerat, vel, assumenda magni. In sapiente harum rerum perferendis cumque voluptates!</small>
+            <br>
+            <button style="color: rgb(255, 230, 0); font-size: 16px; background-color: transparent; font-style: italic; border-color: rgb(252, 177, 65); border-top-style: unset; border-right: unset; border-bottom: 2px groove; 
+                        border-left-width: 4px; border-left-style: ridge; text-indent: -3%; border-right-style: solid double outset; border-style: double ; filter: brightness(90%); box-shadow: rgb(251, 255, 0); text-align: left; border-top-left-radius: 15%; border-top-right-radius:15%; border-bottom-left-radius: 15%; border-bottom-right-radius: 20%;"> 
+                            <a href="/addcomment">edit bio</a>
+                        </button><br><br>
+        </div>
+    </div>
+    {% endif %}
+    
+    
+</body>
+</html>

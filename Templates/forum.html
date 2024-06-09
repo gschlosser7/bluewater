@@ -1,21 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 
-{% extends 'home.html' %}
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>$$ spitball trading $$</title>
+    <link rel="stylesheet" type="text/css" href="../static/loggedin.css">
+     <!-- Latest compiled and minified CSS -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
 </head>
 
-{% block content %}
-<body>
-    <a href="{{url_for('/')}}">forum posts</a>
-    <hr>
-    <div class="content">
-        {% block content %} {% endblock %}
+<nav>
+    <div class="col-lg-3">
+    <div class="logo" style="font-style: italic; padding-right: 1rem; padding-left: .3rem; font-size: xx-large;">bluewater.ai</div>
+    <div class="logo" style="font-size: 16px; font-size: medium; margin-inline-start: 3%; opacity: 80%; color: rgb(77,77,77); filter: contrast(100%); filter: blur(.03rem)">ai advised trading station</div>
+</div>
+<div class="col-lg-3">
+asd
+</div>
+<div class="col-lg-3">
+    asd
+    </div>
+<div class="col-lg-3" style="width: min-content; margin-right: -50%; margin-left: 20%;">
 
+    <a href="{{url_for('profile')}}">
+        <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" style="height: 50px; width: 50px; display: inline;">
+        </a>
+
+    <a href="/logout" style="justify-content: right;">logout</a>
+        
+</div>
+</nav>
+
+<body>
+    
+
+    <br>
+
+    
+<div class="row" style="border: rgb(77, 77, 77) 1px groove; margin-left: .1rem; margin-right:.1rem; width: 33%; height:10rem; border-radius: 0rem; margin-left: 25%; font-size: x-large">
+    <div class="col">
+    <strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+      </svg> {{current_user.username}}
+      <br>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
+        <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
+      </svg>buying power {% if makeValue %} {{ makeValue }} {% endif %}</strong>
+      <br>
+      </div>
+    <div class="col">
+        {% if topPageHoldsView != None %}
+        {% for x in topPageHoldsView %}
+        {{x}}
+        {% endfor %}
+        {% endif %}
+    </div>        
+</div>
+    <div class="title"> 
+        <div class="g-container" id="newsbar" style="overflow:hidden; width: fit-content; animation-timing-function: step-start; animation-timing-function: step-end; animation-timing-function: steps(6, start); animation-timing-function: steps(4, end);">
+            <ul id="ulnews">
+              
+              <li id="linews">Lorem ipsum 5555555Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111</li>
+              <li id="linews">Lorem ipsum 6666666Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111</li>
+              <!-- Fill the first set of data -->
+              <li>Lorem ipsum 1111111</li>
+            </ul>
+          </div>
+        </div>
+        
+        
+        <div class="row"style="border: 1rem solid rgb(7, 7, 7); ;margin-left: .1rem; margin-right:.1rem; width: 100%;">
+
+            <nav >
+                
+            </nav>      
+            
+            <div class=".col-lg-3" id="watchlist" style="font-size: 24px;max-height: 33rem; margin-left: 1rem;padding-bottom: .5rem; border-radius:1rem; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+                
+                <div class="scrollable-table" style="padding-bottom: 3rem; ">
+
+                <nav style="border: unset; width: 100%; ">
+                        <div class="col"><nav style="position: fixed; background-color: rgba(0, 0, 0, 0.514);  margin-left: -2.5rem; padding-left: 1rem; border-top-left-radius: 1rem; width: max-content; border-right: unset; margin-right: 10rem; padding-right: 25%;">watchlist</nav></div>
+                        
+                    </nav>
+                <table class="table" id="watchtable" >
+                    <thead >
+                        
+                    </thead>
+                    <tbody >
+                    <tr >
+                        {% if request.method == 'GET' %}
+                        {%for x in tableh%}
+                        <td id="watchheader"><strong>{{x}}</strong></td>
+                        {%endfor%}
+                        {% endif %}
+                    </tr>
+                    {%for row in test%}
+
+                    <tr ></div>
+                        {% if request.method == 'GET' %}
+                        {%for kv in row%}
+                        <td ><small> 
+                            <form method="post" action="/{{kv}}" style="opacity:0%; position: absolute;">
+                                {% if kv in buttonlist %}
+                                <input name="kvform" type="submit" value="{{kv}}">
+                                {% endif %}
+                              </form>
+                            {{kv}} 
+                            
+                        </small></td>
+                        
+                        {%endfor%}
+
+                        {% endif %}
+                        
+                    </tr>
+                    {% endfor %}
+                    
+                    </tbody>
+                    
+                </table>
+                
+                <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                        const rows =  document.querySelectorAll("tr[data-href]");
+                        rows.forEach(row=>{
+                            row.addEventListener("click", () => {
+                                window.location.href = row.dataset.href;
+                            });
+                        });
+                    });
+
+                    function addcoin () {
+                        document.querySelector("tbody").insertAdjacentHTML("beforeend", `
+                        `)
+                    }
+                </script>
+
+                <tfoot style="padding-bottom: 1rem;"></tfoot>
+                <div class="dropdown" style="position: absolute;">
+                    <button class="btn btn-secondary dropdown-toggle" style="position: sticky;color: rgb(100, 100, 100); border: slategray; background-color: rgba(7,7,7,255)" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>  
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"  style="color: rgb(100, 100, 100); border: slategray; background-color: rgba(7,7,7,255)">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                  </div>
+                  {{watch}}
+                </tfoot>
+                
+            </div>
+            
+            {% for item in watch %}
+                {{item}}
+            {% endfor %}
+            {{swag}}
+            <form action="{{url_for('add')}}" method="post">
+                <input type="text" name="watch">
+                
+                <button type="submit">+item</button>
+
+            </form>
+           
+
+            </div>
+            
+           
+                <div class="card-wrapper" style="border: rgba(0, 60, 255, 0.205) .5rem solid; width:min-content; align-content: center; margin: 0 auto; 
+                color:rgb(44, 44, 44); border-radius: 1rem; position: -webkit-sticky;">
+            <div class="col" id="chartarea" style="font-size: 24px;border: 1rem solid rgb(7, 7, 7);"> 
+                <strong>{{setgraphcoin}}</strong>
+                <select id="coords" style="display: none;">
+                </select>
+                <select id="ycoords" style="display: none;">
+                </select>
+                <script>
+                    var coords = document.getElementById('coords'), test1 = {{clist}};
+                </script>
+                <script>
+                    var coords = document.getElementById('ycoords'), test2 = {{ycoords}};
+                </script>
+                <script type="module">
+                
+                    import "https://cdn.plot.ly/plotly-2.32.0.min.js"
+                    
+                    var layout = {
+                        showlegend:false,
+                        scrollZoom:true
+                    }
+
+                    Plotly.newPlot("chartarea", {
+                        autosize: false, responsive:true, showlegend:false, scrollZoom:true, showticks:false,
+                        "data": [{ "x": test1,"y": test2 }],
+                        "layout": { "width": 933, "height": 434, gridcolor: "rgba(255,0,0,0)",plot_bgcolor:"rgba(0,0,0,0)",
+                        paper_bgcolor:'rgba(0,0,0,0)', margin: { l:0, r:0, b:0, t:0,pad: 10},yaxis: {automargin:true}, xaxis: {automargin:true, type:'date'},'showlegend':false,
+                        scrollZoom:true},
+                        'config':{'displayModeBar':false, 'scrollZoom':true, 'showticks':false}
+                    })
+        
+                </script>
+            </div>
+            <div style="width: max-content">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem fugit enim explicabo voluptates provident aut magni, perspiciatis corrupti praesentium repellendus, saepe excepturi. Enim sunt labore dignissimos unde tenetur earum nisi!
+
+            </div>
+                    </div>
+            <div class="col-lg-3" style="border: 1rem solid rgb(7, 7, 7); padding-left: .5rem; padding-right: .5rem; margin-left: 1rem; "> 
+            <div class="shadow rounded" style="padding-block-start: 1rem; height: min-content;">
+            <div class="gradient-box" style=" margin: 0 auto; border-top-style:unset; 
+           border-bottom-style:outset 1px; border-radius: 5%;border-radius: 1.27rem;"> 
+            <div>
+                
+                <div class="container">
+                    
+                    
+                    
+            <div class="container" style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true" style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">BUY</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">SELL</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false" style="">Chat with AI</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="container">
+                        
+                        
+                        <script type="text/javascript">
+                            window.document.onload =  multiplyBy(){
+                                document.getElementById("myid").innerHTML = Math.random();
+                                document.write("test");
+                            }
+                        </script>
+                        
+                            
+                            <form  method="POST" action="{{url_for('forummain')}}" style="border: rgb(77, 77, 77) 1px groove;width:80%; align-content: center; margin: 0 auto; border-top-style:unset; 
+                            color:rgb(44, 44, 44); border-bottom-style:unset; padding: 33px; border-radius: 0rem; grid:10%; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: medium;">
+                                {{ newpurchase.csrf_token }}
+                                {{newpurchase.hidden_tag()}}
+                                <nav style="border-right: unset; color: rgba(77, 77, 77, 0.959);">
+                                {{newpurchase.coin.label}}
+                                {{newpurchase.coin.data}}
+                                {{newpurchase.pricepercoin.label}}
+                                {{newpurchase.pricepercoin.data}}
+                                </nav>
+                                {{newpurchase.quantity.label}}
+                                {{newpurchase.quantity(id="myid")}}
+                                {{newpurchase.totalcost.label}}
+                                {{newpurchase.totalcost.data }}   
+                                
+                                <br>
+                            <input name="qform" type="submit" id="placeorder" value="place order" style="margin-left: 50%; ">
+                        </form>
+                        <div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;"> total order cost:
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
+                                <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
+                              
+                              <select id="priceper"></select>
+                    </div>
+                </svg><p id="mytotal" ></p>
+                        
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
+                            <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
+                          </svg><script id="realtimecalc" type="text/javascript">
+                            document.getElementById('myid').addEventListener("change", function(event) {
+                                (function(event) {
+                                    var realtimecalc = document.getElementById("mytotal").innerHTML = String(Number({{priceper}}*$("#myid").val()));
+                                
+                                }).call(document.getElementById('myid'), event);
+                                console.log('hello');
+                                document.getElementById('mytotal').style.color = "#0080FF";
+                                document.getElementById('mytotal').style.alignContent = "space-between";
+                                e.preventDefault();
+                                
+                                });
+                        
+                        </script>
+                        
+                        <script id="transact" type="text/javascript">
+                            document.getElementById('placeorder').addEventListener("submit", function(event) {
+                                (function(event) {
+                                    
+                                    $.ajax({
+                                    type:'POST',
+                                    url:'/forum',
+                                    
+                                    data:JSON.stringify({'coin' : $("#myid").val()}),
+                                    contentType: 'application/json;charset=UTF-8',
+                                    success:function()
+                                    {
+                                    alert('saved');
+                                    }
+                                })
+                                e.preventDefault();
+                                
+                                }).call(document.getElementById('newpurchase'), event);
+                                console.log('hello');
+                                
+                                });
+                        
+                        </script>
+                            
+                        
+                        <br>
+                        <form method="POST" action="/quantity" style="border: rgb(77, 77, 77) 1px groove;width:80%; align-content: center; margin: 0 auto; border-top-style:unset; 
+                            color:rgb(44, 44, 44);  padding: 33px; border-radius: 0rem; grid:10%; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+                                
+                        </form>
+                    </div>
+                </div>
+                    
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab" style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+                        SELL
+                    </div>
+                    
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab" style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">Chat with AI</div>
+                    
+                </div>
+            </div>      
+            </div>
+        </div>    
+            </div>
+    </div>
     </div>
 </body>
+
+<footer>
+    <div style="color: rgb(255, 212, 69); font-family: Verdana, Geneva, Tahoma, sans-serif; font-style: italic; font-size: 35pt;">Leaderboards</div>
+    ... data provided by CoinGecko
+
+</footer>
+
 </html>

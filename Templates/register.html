@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>$$ moneybot $$</title>
     <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
 </head>
 <body>
     <nav>
@@ -14,15 +21,25 @@
 
     <h1 id="h1">Register</h1>
 
-    <form action="/submit" method="POST">
-        <label for="username">username</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">password</label><br>
-        <input type="text" id="password" name="password">
+    <h1 id="h1" style="font-size: 44px;">Login</h1>
 
-        <button> <a>sign in</a></button><br><br>
-    </form>
-
+        <h2>
+            <title>you have 3 attempts</title>
+            <div class = 'shadow p-3 mb-5 bg-body rounded'></div>
+                <form method="POST" action="/submit" style="border: rgb(77, 77, 77) 1px groove;width:fit-content; align-content: center; margin: 0 auto; border-top-style:unset; 
+                color:rgb(44, 44, 44); border-bottom-style:unset; padding: 33px; border-radius: 12%; grid:10%">
+                    {{ form.csrf_token }}
+                    {{form.hidden_tag()}}
+                    {{form.username.label(class='form-label')}}
+                    {{form.username(class='form')}}
+                    <br>
+                    {{ form.csrf_token }}
+                    {{ form.password.label(class='form-label')}}
+                    {{form.password(class='form')}}
+                    <br>
+                    <input type="submit" value="Login" style="margin-left: 50%;">
+                </form>
+            </div>
     <!--
     <p id="usernamey">Enter your username </p>
     <p id="usernameyy" style="text-indent: 0em;"><input type="text" name="username" required="required" /> </p>
