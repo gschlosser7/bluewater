@@ -20,7 +20,6 @@ import os
 from flask_migrate import Migrate
 import bcrypt
 from flask_bcrypt import Bcrypt, generate_password_hash
-import datetime
 #plotly
 import plotly
 import plotly.express as px
@@ -31,22 +30,27 @@ from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.serving import run_simple
 import dash_bootstrap_components as dbc
 from pycoingecko import CoinGeckoAPI
+import psycopg2 as pg
 import datetime
-
 #^something in this will fix the cannot import url_decode from werkzeug.urls error. 
 #oauth or something else for AAA
 #import hashlib or better hashing package
 loginmanager =  LoginManager()
 app = Flask(__name__)
 #dash = Dash(__name__)
+conn_string="dbname='moneybase' user='postgres' host='localhost'"
 
-#class serverCfg(object):
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost/moneybase'
-app.config['SECRET_KEY'] = ''
+xxxx=os.environ.get('DATABASE_URL')
+
+#class Config:
+#export DATABASE_URL='postgresql://postgres:Fullstackgamer1@localhost/moneybase'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+#pass pgpass.conf, wherever that is, instead of raw pass
+app.config['SECRET_KEY'] = '\x1b=\xe2wA\xb2\x90m\x8e_\xf9#>U\xfe\x9bw\xe4\x1c\x0cQ\xf5\x88\x18' #'secretkey'
 app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = None
 #SESSION_COOKIE_SECURE and REMEMBER_COOKIE_SECURE = True
-ACCESS_TOKEN = 'CG-'
+ACCESS_TOKEN = 'CG-6bShTxN27LWFuf4HGdxpqchb'
 #server.config.update(
  #   SECRET_KEY=os.urandom(12),
   #  SQLALCHEMY_DATABASE_URI=config.get('database', 'con'),
@@ -548,7 +552,7 @@ def forummain():
                 print('893')
                 print(newpurchase.pricepercoin.data)
                 newpurchase.pricepercoin.data=ycoords[((len(ycoords)-1))]
-                priceper=int(newpurchase.pricepercoin.data)
+                priceper=float(newpurchase.pricepercoin.data)
                 print(newpurchase.coin.data, priceper)
                 print('add try except HERE BECAUSE THE THING ISNT GETTING THE PURCHASEFORM COIN PRICEPER DATA. MAYBE CONVERT WATCHLIST TO OHLC PRICE DATA')
                 
@@ -587,7 +591,7 @@ def forummain():
     #make button press on watchlist trigger searchform event? how to get instant search?
     #make watchlist a class? a class of coins?
     
-    return render_template('forum.html', topPageHoldsView=topPageHoldsView, makeValue=makeValue, priceper=2, setgraphcoin=setgraphcoin,newpurchase=newpurchase, NestedQuantityForm=NestedQuantityForm,error=error, buttonlist=buttonlist, watch=watching, tableh=tableh, test=cointlist, clist=clist, ycoords=ycoords, ohlc=ohlc, purchaseform=purchaseform, newmessage=newmessage)
+    return render_template('forum.html', topPageHoldsView=topPageHoldsView, makeValue=makeValue, priceper=priceper, setgraphcoin=setgraphcoin,newpurchase=newpurchase, NestedQuantityForm=NestedQuantityForm,error=error, buttonlist=buttonlist, watch=watching, tableh=tableh, test=cointlist, clist=clist, ycoords=ycoords, ohlc=ohlc, purchaseform=purchaseform, newmessage=newmessage)
 
 @app.route('/quantity', methods=['GET','POST'])
 @login_required

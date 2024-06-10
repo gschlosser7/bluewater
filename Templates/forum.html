@@ -95,7 +95,7 @@ asd
                 
                 <div class="scrollable-table" style="padding-bottom: 3rem; ">
 
-                <nav style="border: unset; width: 100%; ">
+                <nav style="border: unset; width: 100%;">
                         <div class="col"><nav style="position: fixed; background-color: rgba(0, 0, 0, 0.514);  margin-left: -2.5rem; padding-left: 1rem; border-top-left-radius: 1rem; width: max-content; border-right: unset; margin-right: 10rem; padding-right: 25%;">watchlist</nav></div>
                         
                     </nav>
@@ -214,7 +214,7 @@ asd
                         autosize: false, responsive:true, showlegend:false, scrollZoom:true, showticks:false,
                         "data": [{ "x": test1,"y": test2 }],
                         "layout": { "width": 933, "height": 434, gridcolor: "rgba(255,0,0,0)",plot_bgcolor:"rgba(0,0,0,0)",
-                        paper_bgcolor:'rgba(0,0,0,0)', margin: { l:0, r:0, b:0, t:0,pad: 10},yaxis: {automargin:true}, xaxis: {automargin:true, type:'date'},'showlegend':false,
+                        paper_bgcolor:'rgba(0,0,0,0)', margin: { l:0, r:0, b:0, t:0,pad: 10},yaxis: {automargin:true, gridcolor:'black'}, xaxis: {automargin:true, gridcolor:'gray', type:'date'},'showlegend':false,
                         scrollZoom:true},
                         'config':{'displayModeBar':false, 'scrollZoom':true, 'showticks':false}
                     })
@@ -286,13 +286,16 @@ asd
                               <select id="priceper"></select>
                     </div>
                 </svg><p id="mytotal" ></p>
-                        
+                        <script>
+                            var priceperjs = document.getElementById('priceper'), jscalc={{priceper}};
+                        </script>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
                             <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
                           </svg><script id="realtimecalc" type="text/javascript">
                             document.getElementById('myid').addEventListener("change", function(event) {
                                 (function(event) {
-                                    var realtimecalc = document.getElementById("mytotal").innerHTML = String(Number({{priceper}}*$("#myid").val()));
+                                    
+                                    var realtimecalc = document.getElementById("mytotal").innerHTML = String(jscalc*$("#myid").val());
                                 
                                 }).call(document.getElementById('myid'), event);
                                 console.log('hello');
@@ -303,7 +306,7 @@ asd
                                 });
                         
                         </script>
-                        
+                        {{priceper}}
                         <script id="transact" type="text/javascript">
                             document.getElementById('placeorder').addEventListener("submit", function(event) {
                                 (function(event) {
