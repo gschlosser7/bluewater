@@ -46,11 +46,11 @@ xxxx=os.environ.get('DATABASE_URL')
 #export DATABASE_URL='postgresql://postgres:Fullstackgamer1@localhost/moneybase'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 #pass pgpass.conf, wherever that is, instead of raw pass
-app.config['SECRET_KEY'] = '\x1b=\xe2wA\xb2\x90m\x8e_\xf9#>U\xfe\x9bw\xe4\x1c\x0cQ\xf5\x88\x18' #'secretkey'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') #'secretkey'
 app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = None
 #SESSION_COOKIE_SECURE and REMEMBER_COOKIE_SECURE = True
-ACCESS_TOKEN = 'CG-6bShTxN27LWFuf4HGdxpqchb'
+ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 #server.config.update(
  #   SECRET_KEY=os.urandom(12),
   #  SQLALCHEMY_DATABASE_URI=config.get('database', 'con'),

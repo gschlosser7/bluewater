@@ -1,5 +1,7 @@
-# bluewater
+# _bluewater_
 
-## _Proof of Concept_
-For the purpose of improving strategization while trading in the cryptocurrency marketplace, bluewater provides a simple paper trading interface in conjunction
-with an AI chatbot.
+## Proof of Concept
+For the purpose of improving strategization while trading in the cryptocurrency marketplace, 
+bluewater provides these tools:\
+    *a simple paper trading interface
+    *AI chatbot
