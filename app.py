@@ -38,12 +38,9 @@ import datetime
 loginmanager =  LoginManager()
 app = Flask(__name__)
 #dash = Dash(__name__)
-conn_string="dbname='moneybase' user='postgres' host='localhost'"
-
-xxxx=os.environ.get('DATABASE_URL')
 
 #class Config:
-#export DATABASE_URL='postgresql://postgres:Fullstackgamer1@localhost/moneybase'
+#reminder: will have to set environ vars on web server machine
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 #pass pgpass.conf, wherever that is, instead of raw pass
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') #'secretkey'
@@ -51,12 +48,7 @@ app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = None
 #SESSION_COOKIE_SECURE and REMEMBER_COOKIE_SECURE = True
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
-#server.config.update(
- #   SECRET_KEY=os.urandom(12),
-  #  SQLALCHEMY_DATABASE_URI=config.get('database', 'con'),
-   # SQLALCHEMY_TRACK_MODIFICATIONS=False
-#)
-#dont delete this comment app.config['SECRET_KEY'] = 'secretkey'
+
 url = os.getenv('DATABASE_URL')
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
@@ -149,7 +141,6 @@ class userAccountValue(db.Model):
         self.coinHoldings=coinHoldings
         self.accountHolder=accountHolder
         self.transations=transations
-
 
 #USER MAkes purchase --> form containing account dollar value auto updates default=1mil into default - purchaseamount=new default? or change it to db value
 
@@ -294,7 +285,6 @@ def forummain():
     #at the top here somewhere do usercoinquantity * current price for each coin... add total to buying power
     #userAccountValue.query.filter_by(accountHolder=session['username']).delete()
     #db.session.commit()
-    
 
     watching=watch
     #make watchlist the default ohlc pandas frames in server. user can add to list and trigger ohlc pandas frame post event to server... default=newdefault
@@ -330,7 +320,6 @@ def forummain():
         #makeValue='1000000'
         #db.session.add(makeValue)
         #db.session.commit()
-
 
     try:
         if watchlist.coinBeingViewed:
@@ -423,8 +412,7 @@ def forummain():
         if newpurchase.validate_on_submit():
             print('383')
             userVal=userAccountValue.query.filter_by(accountHolder=session['username']).first()
-
-            
+          
             qChoices=newpurchase.quantity.choices
             coin = newpurchase.coin.data
             newpurchase.pricepercoin.data = ycoords[(len(ycoords)-1)]
@@ -563,7 +551,6 @@ def forummain():
                 #return said list of tuples as test, seen below
     except:
         priceper=ycoords[((len(ycoords)-1))]
-    
     
         '''empty=''
         newpurchase.quantity.choices=[(None,''),('10','10'),('100','100'),('1000','1000')]
