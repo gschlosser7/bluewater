@@ -192,21 +192,19 @@ class newPurchase(FlaskForm):
     #time will be datetime column, maybe use the time from the coingecko data?
     buy=SubmitField('BUY')
 class newSell(FlaskForm):
-    coin=StringField('coin' )
-    pricepercoin=StringField('price')
-    quantity=StringField('quantity')
-    totalcost=StringField('total' )
+    coindrop=StringField('coin')
+    pricepercoinSell=StringField('price')
+    quantitySell=StringField('quantity', validators=[DataRequired()])
+    totalcostSell=StringField('total' )
     #time will be datetime column, maybe use the time from the coingecko data?
     sell=SubmitField('sell')
+
 preselectedBuyAmounts2=[(None,''),('10','10'),('100','100'),('1000','1000')]
 class nestedQuantityForm(FlaskForm):
     quantize=SelectField('quantity', choices=preselectedBuyAmounts2, validators=[DataRequired()], validate_choice=False)
     buy=SubmitField('BUY')#use submit buttons plural that auto update a "total" outside of the form
-#class showAccountValue(FlaskForm):
-    #value=StringField('portfolio value', default=userAccountValue.query.filter_by(accountHolder=session['username']).first().portfolioValue)
-#class transaction(FlaskForm):
-    #make the userTransactions post data to showAccountValue when user places order?
-    #append json? list? of data to transaction column for user
+
+
 
 #app.context().push() possibly
 with app.app_context():
@@ -292,7 +290,8 @@ def forummain():
     newpurchase=newPurchase()
     newpurchase.quantity.choices=[('',''),('10','10'),('100','100'),('1000','1000')]
     NestedQuantityForm=nestedQuantityForm()
-
+    newsell=newSell()
+    
     cg = CoinGeckoAPI()
     watchlist=currentView.query.filter_by(curr_user=session['username']).first()
     #raise exception for response 500 to change watchlist.coin to bitcoin or something. coingecko data doesnt come through for some coins.
@@ -307,12 +306,15 @@ def forummain():
         for coin in showHoldings:
             vals=showHoldings[coin]
             topPageHoldsView.append(coin)
+            #newsell.coindrop.choices.append(tuple((coin, coin)))
+            
+            print('new SELL', newsell.coindrop.data)
             for x in vals:
                 
                 topPageHoldsView.append((round(float(x),3)))
             
             print(topPageHoldsView,'TPV')
-
+    
     else:
         makeValue='$1000000.00'
         topPageHoldsView=None
@@ -328,6 +330,8 @@ def forummain():
             setgraphcoin=watchlist.coinBeingViewed #change graph data to data of coin user just clicked on
             setPurchaseFormCoin=watchlist.coinBeingViewed #change green highlighted 'coin' text in newpurchase
             newpurchase.coin.data = setPurchaseFormCoin
+            newsell.coindrop.data= str(setPurchaseFormCoin)
+
             ohlc = cg.get_coin_ohlc_by_id(id=setgraphcoin, vs_currency='usd', days='30')
             error=''
             
@@ -409,7 +413,7 @@ def forummain():
         newpurchase.quantity.choices=[(None,''),('10','10'),('100','100'),('1000','1000')]
         qChoices=newpurchase.quantity.choices
         print(newpurchase.quantity.data,newpurchase.coin.data, newpurchase.totalcost.render_kw, newpurchase.pricepercoin.raw_data,'p[[pp[p[pppp[]]]]]')
-        if newpurchase.validate_on_submit():
+        if newpurchase.buy.data and newpurchase.validate_on_submit():
             print('383')
             userVal=userAccountValue.query.filter_by(accountHolder=session['username']).first()
           
@@ -502,6 +506,18 @@ def forummain():
 
             return redirect(url_for('forummain'))
         
+        if newsell.sell.data and newsell.validate_on_submit():
+            coindrop=newsell.coindrop.data
+            print('in theorruyyyyyy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
+            if coindrop in showHoldings:
+                amountSold = float(newsell.quantitySell.data)
+                print('09qewdi9aide90qwa')
+                return redirect(url_for('forummain'))
+            else:
+                print('noadsijaiqsjdi')
+                return 'adas'
+            
+
     elif request.method=='GET':
         print((response.text), 'response text')
         print(response, current_user)
@@ -541,6 +557,7 @@ def forummain():
                 print(newpurchase.pricepercoin.data)
                 newpurchase.pricepercoin.data=ycoords[((len(ycoords)-1))]
                 priceper=float(newpurchase.pricepercoin.data)
+                newsell.pricepercoinSell.data=priceper
                 print(newpurchase.coin.data, priceper)
                 print('add try except HERE BECAUSE THE THING ISNT GETTING THE PURCHASEFORM COIN PRICEPER DATA. MAYBE CONVERT WATCHLIST TO OHLC PRICE DATA')
                 
@@ -551,6 +568,7 @@ def forummain():
                 #return said list of tuples as test, seen below
     except:
         priceper=ycoords[((len(ycoords)-1))]
+        newsell.pricepercoinSell.data=priceper
     
         '''empty=''
         newpurchase.quantity.choices=[(None,''),('10','10'),('100','100'),('1000','1000')]
@@ -578,7 +596,7 @@ def forummain():
     #make button press on watchlist trigger searchform event? how to get instant search?
     #make watchlist a class? a class of coins?
     
-    return render_template('forum.html', topPageHoldsView=topPageHoldsView, makeValue=makeValue, priceper=priceper, setgraphcoin=setgraphcoin,newpurchase=newpurchase, NestedQuantityForm=NestedQuantityForm,error=error, buttonlist=buttonlist, watch=watching, tableh=tableh, test=cointlist, clist=clist, ycoords=ycoords, ohlc=ohlc, purchaseform=purchaseform, newmessage=newmessage)
+    return render_template('forum.html', newsell=newsell, topPageHoldsView=topPageHoldsView, makeValue=makeValue, priceper=priceper, setgraphcoin=setgraphcoin,newpurchase=newpurchase, NestedQuantityForm=NestedQuantityForm,error=error, buttonlist=buttonlist, watch=watching, tableh=tableh, test=cointlist, clist=clist, ycoords=ycoords, ohlc=ohlc, purchaseform=purchaseform, newmessage=newmessage)
 
 @app.route('/quantity', methods=['GET','POST'])
 @login_required
@@ -767,7 +785,7 @@ cf = pd.DataFrame({
     'daterange': ['0','3']
 })
 
-board=Dash(__name__, server=app, requests_pathname_prefix="/app1/")
+board=Dash(__name__, requests_pathname_prefix="/app1/") #server=app param ?
 
 board.title='Financial Dashboard'
 #board._favicon = ("favico.ico")
@@ -822,4 +840,4 @@ application = DispatcherMiddleware(
 
 if __name__== '__main__':
     #dash.run(debug=True)
-    run_simple("localhost", 5000, application, use_reloader=True)
+    run_simple("localhost", 8050, application, use_reloader=True)
