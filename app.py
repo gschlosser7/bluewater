@@ -467,8 +467,8 @@ def forummain():
                     roundedNum1 = (float(coinVals[1])*float(coinVals[0])) + float(totalcost) 
                     print(roundedNum2, roundedNum1, 'r1r2---------')
                     
-                    roundedNum2=round(roundedNum2, 2)
-                    roundedNum1=round(roundedNum1, 2)
+                    roundedNum2=round(roundedNum2, 5)
+                    roundedNum1=round(roundedNum1, 5)
                     
                     empty={str(coin):(str(float(roundedNum1)/float(roundedNum2)), roundedNum2,roundedNum1)}
                     loadHolds[coin]=[str(roundedNum2), str(float(roundedNum1)/float(roundedNum2))]
@@ -508,10 +508,23 @@ def forummain():
         
         if newsell.sell.data and newsell.validate_on_submit():
             coindrop=newsell.coindrop.data
+            print(coindrop, newsell.quantitySell.data, newsell.pricepercoinSell.data, newsell.pricepercoinSell.raw_data)
             print('in theorruyyyyyy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
             if coindrop in showHoldings:
+                print(coindrop, showHoldings)
                 amountSold = float(newsell.quantitySell.data)
-                print('09qewdi9aide90qwa')
+                currVals = showHoldings[coindrop]
+                quantity=float(currVals[0]) - float(newsell.quantitySell.data) 
+                holdingValue=float(currVals[1])*float(currVals[0]) - float(newsell.quantitySell.data)*float(ycoords[(len(ycoords)-1)])
+                newAvg=holdingValue/quantity
+                quantity=str(quantity)
+                print(str((coindrop, quantity, newAvg)))
+                showHoldings[coindrop]=(str(quantity), str(newAvg))
+                print(showHoldings, '22222222222222222222222222222')
+                getValue.coinHoldings=json.dumps(showHoldings)
+
+                db.session.commit()
+                #remember to pop out the coin if they sell the whole stack
                 return redirect(url_for('forummain'))
             else:
                 print('noadsijaiqsjdi')
