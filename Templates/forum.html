@@ -65,6 +65,7 @@ asd
       <br>
       </div>
     <div class="col">
+        <tr style="color: #0080FF;">coin    quantity    value</tr><br>
         {% if topPageHoldsView != None %}
         {% for x in topPageHoldsView %}
         <tr>{{x}}</tr>
@@ -276,7 +277,7 @@ asd
                                 {{newpurchase.quantity(id="myid")}}
                                 {{newpurchase.totalcost.label}}
                                 {{newpurchase.totalcost.data }}   
-                                {{newpurchase.buy()}}
+                                {{newpurchase.buy(id="buybutton")}}
                                 
                                 <br>
                             
@@ -344,7 +345,7 @@ asd
                     
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab" style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
                         
-                        <form  method="POST" action="{{url_for('forummain')}}" style="border: rgb(77, 77, 77) 1px groove;width:80%; align-content: center; margin: 0 auto; border-top-style:unset; 
+                        <form method="POST" action="{{url_for('forummain')}}" style="border: rgb(77, 77, 77) 1px groove;width:80%; align-content: center; margin: 0 auto; border-top-style:unset; 
                             color:rgb(44, 44, 44); border-bottom-style:unset; padding: 33px; border-radius: 0rem; grid:10%; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: medium;">
                                 {{ newsell.csrf_token }}
                                 {{newsell.hidden_tag()}}
@@ -360,13 +361,23 @@ asd
                                 {{newsell.quantitySell(class="form")}}
                                 {{newsell.totalcostSell.label}}
                                 {{newsell.totalcostSell.data}}
-                                {{ newsell.sell() }}
+                                {{ newsell.sell(id="sellbutton") }}
 
                                 <br>
                             
                         </form>
+                        <script>
+                            document.getElementById('profile').style.accentColor='#0080ffe3';
+                            document.getElementById('profile').style.backgroundColor='#0080ffe3';
+                            document.getElementById('profile').style.fill='color: #0080ffe3';
+                        </script>
                     </div>
-                    
+                    {% if setgraphcoin in topPageHoldsView %}
+                        <script>
+                            document.getElementById('profile-tab').style.setProperty='#&:hover{ color:black; }';
+                            document.getElementById('profile-tab').style.color='#0080ffe3';
+                        </script>
+                    {% endif %}
                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab" style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">Chat with AI</div>
                     
                 </div>
@@ -379,9 +390,9 @@ asd
 </body>
 
 <footer>
-    <div style="color: rgb(255, 212, 69); font-family: Verdana, Geneva, Tahoma, sans-serif; font-style: italic; font-size: 35pt;">Leaderboards</div>
+    <div class="col" style="color: rgb(255, 212, 69); font-family: Verdana, Geneva, Tahoma, sans-serif; font-style: italic; font-size: 35pt; width:fit-content">data provided by CoinGecko</div>
     ... data provided by CoinGecko
-
+    <div class="col" id="footerright"></div>
 </footer>
 
 </html>
