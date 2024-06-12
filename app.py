@@ -487,7 +487,7 @@ def forummain():
                     print(loadHolds)
                     
                     userVal.coinHoldings=json.dumps(loadHolds)
-                    
+                    userVal.portfolioValue=float(userVal.portfolioValue) - float(totalcost)
                     #userVal.coin={str(coin):('','')}
                     #coin=json.dumps(coin+empty)
                     db.session.commit()
@@ -514,18 +514,37 @@ def forummain():
                 print(coindrop, showHoldings)
                 amountSold = float(newsell.quantitySell.data)
                 currVals = showHoldings[coindrop]
-                quantity=float(currVals[0]) - float(newsell.quantitySell.data) 
+                quantity=float(currVals[0]) - abs(float(newsell.quantitySell.data)) 
                 holdingValue=float(currVals[1])*float(currVals[0]) - float(newsell.quantitySell.data)*float(ycoords[(len(ycoords)-1)])
-                newAvg=holdingValue/quantity
-                quantity=str(quantity)
-                print(str((coindrop, quantity, newAvg)))
-                showHoldings[coindrop]=(str(quantity), str(newAvg))
-                print(showHoldings, '22222222222222222222222222222')
-                getValue.coinHoldings=json.dumps(showHoldings)
+                
+                try:
+                    newAvg=holdingValue/quantity
+                    quantity=str(quantity)
+                    print(str((coindrop, quantity, newAvg)))
+                    showHoldings[coindrop]=(str(quantity), str(newAvg))
+                    print(showHoldings, '22222222222222222222222222222')
+                    getValue.coinHoldings=json.dumps(showHoldings)
+                    getValue.portfolioValue=float(getValue.portfolioValue) + (amountSold*float(ycoords[((len(ycoords)-1))]))
 
-                db.session.commit()
-                #remember to pop out the coin if they sell the whole stack
-                return redirect(url_for('forummain'))
+                    db.session.commit()
+                    return redirect(url_for('forummain'))
+                except:
+                    if quantity <= 0: #this is hit if the user sells the whole stack
+                        print('bong')
+                        showHoldings.pop(coindrop)
+                        getValue.coinHoldings=json.dumps(showHoldings)
+                        if showHoldings=='{}':
+                            try:
+                                db.session.delete(getValue.coinHoldings)
+                                db.session.commit()
+                            except:
+                                getValue.coinHoldings=''
+                                db.session.commit()
+
+                        getValue.portfolioValue=float(getValue.portfolioValue) + (amountSold*float(ycoords[((len(ycoords)-1))]))
+
+                        db.session.commit()
+                    return redirect(url_for('forummain'))
             else:
                 print('noadsijaiqsjdi')
                 return 'adas'
