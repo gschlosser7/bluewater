@@ -142,6 +142,34 @@ class userAccountValue(db.Model):
         self.accountHolder=accountHolder
         self.transations=transations
 
+class coinGeckoCoinList(db.Model):
+    id=db.Column(db.Integer(), primary_key=True)
+    coin=db.Column(db.String(80), unique=False)
+    def __init__(self, coin):
+        self.coin=coin
+class coinGeckoCoinsList(db.Model):
+    id=db.Column(db.Integer(), primary_key=True)
+    coin=db.Column(db.String(255), unique=False)
+    def __init__(self, coin):
+        self.coin=coin
+class coinGeckoCoinsList2(db.Model):
+    __tablename__='coin_geck_coins_list2'
+    id=db.Column(db.Integer(), primary_key=True)
+    coin=db.Column(db.String(255), unique=True)
+    def __init__(self, coin):
+        self.coin=coin
+
+class coinGeckoCoinsList3(db.Model):
+
+    id=db.Column(db.Integer(), primary_key=True)
+    coin=db.Column(db.String(255), unique=False)
+    def __init__(self, coin):
+        self.coin=coin
+class cgList(db.Model):
+    id=db.Column(db.Integer(), primary_key=True)
+    coin=db.Column(db.String(80), unique=False)
+    def __init__(self, cgcoin):
+        self.cgcoin=cgcoin
 #USER MAkes purchase --> form containing account dollar value auto updates default=1mil into default - purchaseamount=new default? or change it to db value
 
 '''class userEmail(db.Model):
@@ -277,12 +305,32 @@ def forummain():
     #db.session.add(addEmail)
     #db.session.commit()
 
-    #ai template: does {purchaseform} seem like a good trade in comparison to other trades?
+    #ai template: does {purchaseform} and current technical analysis seem like a good trade in comparison to other trades?
     #def forummain(currently_viewing)
 
     #at the top here somewhere do usercoinquantity * current price for each coin... add total to buying power
     #userAccountValue.query.filter_by(accountHolder=session['username']).delete()
     #db.session.commit()
+    #
+    #coinGeckoCoinsList2.__tablename__.drop(create_engine)
+    '''cgheaders = {"Authorization": ACCESS_TOKEN, "accept": "application/json"}
+    coinlisturl = "https://api.coingecko.com/api/v3/coins/list"
+    
+    getcoinsfromCG= requests.get(coinlisturl, cgheaders)
+    parseCoinForID = json.loads(getcoinsfromCG.text)
+    cgCheck=cgList.coin
+    if not cgCheck:
+        for xx in parseCoinForID:
+            try:
+                addcgcoin=cgList(xx['name'])
+                db.session.add(addcgcoin)
+                db.session.commit()
+                
+            except Exception as e:
+                print(e)'''
+#the above code is a static method of loading all coin names into DB for instant query purposes later
+    testing=coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains('bitcoin')).limit(5).all()
+    print(testing)
 
     watching=watch
     #make watchlist the default ohlc pandas frames in server. user can add to list and trigger ohlc pandas frame post event to server... default=newdefault
@@ -629,6 +677,24 @@ def forummain():
     #make watchlist a class? a class of coins?
     
     return render_template('forum.html', newsell=newsell, topPageHoldsView=topPageHoldsView, makeValue=makeValue, priceper=priceper, setgraphcoin=setgraphcoin,newpurchase=newpurchase, NestedQuantityForm=NestedQuantityForm,error=error, buttonlist=buttonlist, watch=watching, tableh=tableh, test=cointlist, clist=clist, ycoords=ycoords, ohlc=ohlc, purchaseform=purchaseform, newmessage=newmessage)
+@app.route('/forum/search', methods=['GET','POST'])
+@login_required
+def instasearch():
+    print('here')
+    coinsearch = request.args.get('q')
+    #clist = json.loads(coinGeckoCoinsList3.coin)
+    #rint(clist)
+    print(coinsearch)
+    if coinsearch:
+        print('SEARCHING...')
+        results= coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains(coinsearch)).limit(5).all()
+        print('SEARCHING')
+        for x in results:
+            print(x)
+    else:
+        results=[]
+
+    return render_template('coinsearch.html', results=results)
 
 @app.route('/quantity', methods=['GET','POST'])
 @login_required

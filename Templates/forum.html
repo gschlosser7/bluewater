@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$$ spitball trading $$</title>
+    <title>bluewater</title>
     <link rel="stylesheet" type="text/css" href="../static/loggedin.css">
      <!-- Latest compiled and minified CSS -->
 
@@ -17,7 +17,9 @@
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <!--htmx-->
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -31,10 +33,10 @@
     <div class="logo" style="font-size: 16px; font-size: medium; margin-inline-start: 3%; opacity: 80%; color: rgb(77,77,77); filter: contrast(100%); filter: blur(.03rem)">ai advised trading station</div>
 </div>
 <div class="col-lg-3">
-asd
+
 </div>
 <div class="col-lg-3">
-    asd
+    
     </div>
 <div class="col-lg-3" style="width: min-content; margin-right: -50%; margin-left: 20%;">
 
@@ -53,25 +55,28 @@ asd
     <br>
 
     
-<div class="row" style="border: rgb(77, 77, 77) 1px groove; margin-left: .1rem; margin-right:.1rem; width: 33%; height:10rem; border-radius: 0rem; margin-left: 25%; font-size: x-large">
-    <div class="col">
+<div class="row" style="border: rgb(77, 77, 77) 1px groove;  border-radius:1rem; width: 33%; height:10rem; font-size: x-large">
+    <div class="col" style="font-weight: 300; inset-inline-start: -.5rem;">
     <strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
         <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
       </svg> {{current_user.username}}
       <br>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
         <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
-      </svg>buying power {% if makeValue %} {{ makeValue }} {% endif %}</strong>
+      </svg>buying power {% if makeValue %} <small>{{ makeValue }} </small>{% endif %}</strong>
       <br>
       </div>
-    <div class="col">
-        <tr style="color: #0080FF;">coin    quantity    value</tr><br>
-        {% if topPageHoldsView != None %}
-        {% for x in topPageHoldsView %}
-        <tr>{{x}}</tr>
-        
-        {% endfor %}
-        {% endif %}
+    <div class="col" style="overflow-y: scroll; height:9.5rem;scrollbar-width: thin; ">
+        <div class="scrollable-table" style="color: #0080FF; font-weight: 200; scrollbar-width: thin; scrollbar-color: #777; font-size: medium;">
+            <thead style="color: #0080FF; margin-top:-2rem; align-content: center;"><small><td>coin</td> <td>quantity</td> <td>total value</td></small></thead><br>
+            {% if topPageHoldsView != None %}
+            {% for x in topPageHoldsView %}
+            {% if x in buttonlist %} <br> {% endif %}
+            <td><small>{{x}}</small> | </td>
+            
+            {% endfor %}
+            {% endif %}
+    </div>
     </div>        
 </div>
     <div class="title"> 
@@ -164,9 +169,14 @@ asd
                         </svg>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"  style="color: rgb(100, 100, 100); border: slategray; background-color: rgba(7,7,7,255)">
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
+                      <tbody id="results"></tbody>
+                        <div class="dropdown-item" >
+                        
+                        <input id="coinsearch" type="text" class="input" placeholder="add coin" name="q" hx-get="/forum/search" hx-trigger="keyup changed" hx-targets="#results">
+                        
+                        
+                        </div>
+                     
                     </div>
                   </div>
                   {{watch}}
@@ -178,12 +188,7 @@ asd
                 {{item}}
             {% endfor %}
             {{swag}}
-            <form action="{{url_for('add')}}" method="post">
-                <input type="text" name="watch">
-                
-                <button type="submit">+item</button>
-
-            </form>
+            
            
 
             </div>
@@ -390,7 +395,7 @@ asd
 </body>
 
 <footer>
-    <div class="col" style="color: rgb(255, 212, 69); font-family: Verdana, Geneva, Tahoma, sans-serif; font-style: italic; font-size: 35pt; width:fit-content">data provided by CoinGecko</div>
+    <div class="col" style="color: rgb(255, 212, 69); font-family: Verdana, Geneva, Tahoma, sans-serif; font-style: italic; font-size: large; width:fit-content;block-size: 10rem;">data provided by CoinGecko</div>
     ... data provided by CoinGecko
     <div class="col" id="footerright"></div>
 </footer>
