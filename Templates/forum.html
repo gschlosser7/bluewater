@@ -98,7 +98,7 @@
                 
             </nav>      
             
-            <div class=".col-lg-3" id="watchlist" style="font-size: 24px;max-height: 33rem; margin-left: 1rem;padding-bottom: .5rem; border-radius:1rem; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+            <div class=".col-lg-3" id="watchlist" style="font-size: 24px;height: 50vh; margin-left: 1rem;padding-bottom: .5rem; border-radius:1rem; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
                 
                 <div class="scrollable-table" style="padding-bottom: 3rem; ">
 
@@ -169,17 +169,25 @@
                         </svg>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"  style="color: rgb(100, 100, 100); border: slategray; background-color: rgba(7,7,7,255)">
-                      <tbody id="results"></tbody>
+                      
                         <div class="dropdown-item" >
                         
-                        <input id="coinsearch" type="text" class="input" placeholder="add coin" name="q" hx-get="/forum/search" hx-trigger="keyup changed" hx-targets="#results">
-                        
-                        
+                        <input id="coinsearch"  type="text" class="input" placeholder="add coin" name="q" hx-get="{{url_for('instasearch')}}" hx-trigger="keyup changed" hx-target="#results">
+                        <form action="{{url_for('add')}}" method="post">
+                            <input type="text" name="watch">
+            
+                            <button type="submit">+item</button>
                         </div>
                      
                     </div>
                   </div>
                   {{watch}}
+                  <table class="table is-fullwidth">
+                  <tbody style="color: wheat; background-color: #0080FF;"><thead><tr><th>result</th></tr></thead></tbody>
+            <tbody id="results" style="height: 10rem;">
+
+            </tbody>
+        </table>
                 </tfoot>
                 
             </div>
@@ -189,8 +197,7 @@
             {% endfor %}
             {{swag}}
             
-           
-
+            
             </div>
             
            
@@ -377,7 +384,7 @@
                             document.getElementById('profile').style.fill='color: #0080ffe3';
                         </script>
                     </div>
-                    {% if setgraphcoin in topPageHoldsView %}
+                    {% if topPageHoldsView and setgraphcoin in topPageHoldsView %}
                         <script>
                             document.getElementById('profile-tab').style.setProperty='#&:hover{ color:black; }';
                             document.getElementById('profile-tab').style.color='#0080ffe3';

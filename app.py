@@ -32,12 +32,14 @@ import dash_bootstrap_components as dbc
 from pycoingecko import CoinGeckoAPI
 import psycopg2 as pg
 import datetime
+from flask_htmx import HTMX
 #^something in this will fix the cannot import url_decode from werkzeug.urls error. 
 #oauth or something else for AAA
 #import hashlib or better hashing package
 loginmanager =  LoginManager()
 app = Flask(__name__)
 #dash = Dash(__name__)
+htmx=HTMX()
 
 #class Config:
 #reminder: will have to set environ vars on web server machine
@@ -53,6 +55,7 @@ url = os.getenv('DATABASE_URL')
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 migrate=Migrate(app,db, command='migrate', compare_type=True) # think this was alr fixed because migrate isnt used anymore but idk leaving this just in case
+htmx=HTMX(app)
 
 loginmanager.init_app(app)
 loginmanager.login_view='/'
@@ -313,6 +316,7 @@ def forummain():
     #db.session.commit()
     #
     #coinGeckoCoinsList2.__tablename__.drop(create_engine)
+    #rollback after the above
     '''cgheaders = {"Authorization": ACCESS_TOKEN, "accept": "application/json"}
     coinlisturl = "https://api.coingecko.com/api/v3/coins/list"
     
@@ -329,6 +333,7 @@ def forummain():
             except Exception as e:
                 print(e)'''
 #the above code is a static method of loading all coin names into DB for instant query purposes later
+    
     testing=coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains('bitcoin')).limit(5).all()
     print(testing)
 
@@ -344,7 +349,7 @@ def forummain():
     watchlist=currentView.query.filter_by(curr_user=session['username']).first()
     #raise exception for response 500 to change watchlist.coin to bitcoin or something. coingecko data doesnt come through for some coins.
 
-
+    
     #get accValue
     getValue=userAccountValue.query.filter_by(accountHolder=session['username']).first()
     if getValue:
@@ -675,9 +680,10 @@ def forummain():
             return redirect(url_for('forummain'))'''
     #make button press on watchlist trigger searchform event? how to get instant search?
     #make watchlist a class? a class of coins?
-    
+    if htmx:
+        return render_template('coinsearch.html')
     return render_template('forum.html', newsell=newsell, topPageHoldsView=topPageHoldsView, makeValue=makeValue, priceper=priceper, setgraphcoin=setgraphcoin,newpurchase=newpurchase, NestedQuantityForm=NestedQuantityForm,error=error, buttonlist=buttonlist, watch=watching, tableh=tableh, test=cointlist, clist=clist, ycoords=ycoords, ohlc=ohlc, purchaseform=purchaseform, newmessage=newmessage)
-@app.route('/forum/search', methods=['GET','POST'])
+@app.route('/search', methods=['GET','POST'])
 @login_required
 def instasearch():
     print('here')
@@ -687,14 +693,35 @@ def instasearch():
     print(coinsearch)
     if coinsearch:
         print('SEARCHING...')
-        results= coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains(coinsearch)).limit(5).all()
+        results= coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains(coinsearch)).limit(100).all()
         print('SEARCHING')
         for x in results:
-            print(x)
+            try:
+                coinsearch=coinsearch.upper()
+                try:
+                    ec=json.loads(x.coin)    
+                    if len(coinsearch)>1 and ec['name'][0]==coinsearch[0]:
+                        print('it does')
+                        grabname = ec.pop('name')        
+                        results.append(grabname)
+                except Exception as e:
+                    print(e)
+            except Exception as e:
+                print(e)
     else:
         results=[]
-
-    return render_template('coinsearch.html', results=results)
+    results2=[]
+    for y in results:
+        if type(y)==str:
+            print(y,'passed')
+            results2.append(y)
+        else:
+            results.remove(y)
+    print(results[::-1])
+    print(results2)
+    if htmx:
+        return render_template('coinsearch.html', results=results2)
+    return render_template('coinsearch.html', results=results2[::2])
 
 @app.route('/quantity', methods=['GET','POST'])
 @login_required
@@ -728,10 +755,11 @@ def quantize():
 def add():
     #id, curruser, coin
     if request.method=='POST':
-        preselected = ['xrp', 'polygon', 'dogecoin', 'chainlink', 'Filecoin', 'filecoin', 'Tezos','tezos', 'Celo','celo','subsquid','Subsquid'] #repleace this list with names in ohlc dataframe in forummain
+        preselected = ['xrp', 'polygon', 'dogecoin', 'chainlink', 'Filecoin', 'filecoin', 'Tezos','tezos', 'Celo','celo','subsquid','Subsquid','wigger','Wigger'] #repleace this list with names in ohlc dataframe in forummain
         curruser = session['username']
         print(curruser, 'curr')
         item =  request.form['watch']
+        print(item)
         if item in preselected:
             currlist=userCoinlist.query.filter_by(curruser=session['username']).first()
             #currlist2=db.session.execute(db.select(userCoinlist).order_by(userCoinlist.curruser)).scalars()
@@ -780,7 +808,7 @@ def edit(watchlist):
         #user = User.query.get(current_user.get_id())
         return redirect(url_for('forummain'))
     else:
-        return render_template('forum.html', swag=item, watchlist=watchlist)
+        return render_template('forum.html', item=item, watchlist=watchlist)
     
 @app.route('/place_order', methods=['GET'])
 @login_required
