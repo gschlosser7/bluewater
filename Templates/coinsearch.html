@@ -1,6 +1,10 @@
 
 {% for result in results %}
 <tr>
-    <td>{{result}}</td>
+    <td><form  action="{{url_for('add')}}" method="post">
+        
+            
+        <button name="watch" value="{{result}}" type="submit">{{result}}</button>
+    </div></td>
 </tr>
 {% endfor %}
