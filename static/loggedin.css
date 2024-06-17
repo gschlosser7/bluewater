@@ -132,9 +132,7 @@ footer .col {
     font-style: italic;
 }
 
-#watchheader{
-  color: rgb(77, 77, 77);
-}
+
 #chartarea{
   height: 70vh;
   position: absolute;
@@ -199,10 +197,13 @@ footer .col {
   
   }
 }
+#watchheader{
+  color: rgb(77, 77, 77);
+}
 #watchtable{
   box-shadow: 0 0 0 2px #162a57d0;
   border-radius: .1rem;
-  
+  border-top: #0080FF 1px solid;
 }
 #priceper{
   visibility: hidden;
@@ -333,34 +334,38 @@ makeacc{
 
 @media (max-width:600px) {
   .wrapper-main{
-    width:100%
-    
+    width:30%;
+    height:100vh;
   }
 }
 
 @media (max-width:601px) {
   .wrapper-main{
-    width:30%
+    width:30%;
+    height:100vh;
     
   }
 }
 
 @media (max-width:768px) {
   .wrapper-main{
-    width:30%
+    width:30%;
+    height:100vh;
     
   }
 }
 
 @media (max-width:992px) {
   .wrapper-main{
-    width:100%
+    width:30%;
+    height:100vh;
     
   }
 }
 @media (max-width:1200px) {
   .wrapper-main{
-    width:100%
+    width:30%;
+    height:100vh;
     
   }
 }
