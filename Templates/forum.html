@@ -68,7 +68,7 @@
       </div>
     <div class="col" style="overflow-y: scroll; height:9.5rem;scrollbar-width: thin; ">
         <div class="scrollable-table" style="color: #0080FF; font-weight: 200; scrollbar-width: thin; scrollbar-color: #777; font-size: medium;">
-            <thead style="color: #0080FF; margin-top:-2rem; align-content: center;"><small><td>coin</td> <td>quantity</td> <td>total value</td></small></thead><br>
+            <thead style="color: #0080FF; margin-top:-2rem; align-content: center;"><small><td>coin </td> <td>| quantity </td> <td>| avg cost</td></small></thead><br>
             {% if topPageHoldsView != None %}
             {% for x in topPageHoldsView %}
             {% if x in buttonlist %} <br> {% endif %}
@@ -79,26 +79,13 @@
     </div>
     </div>        
 </div>
-    <div class="title"> 
-        <div class="g-container" id="newsbar" style="overflow:hidden; width: fit-content; animation-timing-function: step-start; animation-timing-function: step-end; animation-timing-function: steps(6, start); animation-timing-function: steps(4, end);">
-            <ul id="ulnews">
-              
-              <li id="linews">Lorem ipsum 5555555Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111</li>
-              <li id="linews">Lorem ipsum 6666666Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111Lorem ipsum 1111111</li>
-              <!-- Fill the first set of data -->
-              <li>Lorem ipsum 1111111</li>
-            </ul>
-          </div>
-        </div>
         
         
-        <div class="row"style="border: 1rem solid rgb(7, 7, 7); ;margin-left: .1rem; margin-right:.1rem; width: 100%;">
+        <div class="row"style="border: 1rem solid rgb(12, 77, 123); width: 100%; margin: 0 auto; position: absolute;">
 
-            <nav >
-                
-            </nav>      
             
-            <div class=".col-lg-3" id="watchlist" style="font-size: 24px;height: 50vh; margin-left: 1rem;padding-bottom: .5rem; border-radius:1rem; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+            
+            <div class=".col-lg-3" id="watchlist" style="font-size: 24px;height: 50vh; width: 33vh; margin-left: 1rem;padding-bottom: .5rem; border-radius:1rem; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
                 
                 <div class="scrollable-table" style="padding-bottom: 3rem; ">
 
@@ -173,10 +160,7 @@
                         <div class="dropdown-item" >
                         
                         <input id="coinsearch"  type="text" class="input" placeholder="add coin" name="q" hx-get="{{url_for('instasearch')}}" hx-trigger="keyup changed" hx-target="#results">
-                        <form action="{{url_for('add')}}" method="post">
-                            <input type="text" name="watch">
-            
-                            <button type="submit">+item</button>
+                        
                         </div>
                      
                     </div>
@@ -200,10 +184,14 @@
             
             </div>
             
-           
-                <div class="card-wrapper" style="border: rgba(0, 60, 255, 0.205) .5rem solid; width:min-content; align-content: center; margin: 0 auto; 
-                color:rgb(44, 44, 44); border-radius: 1rem; position: -webkit-sticky;">
-            <div class="col" id="chartarea" style="font-size: 24px;border: 1rem solid rgb(7, 7, 7);"> 
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg"></div>
+                
+            <div class="col-lg-12" id="chartarea" style="font-size: 24px;border: .5rem solid rgb(7, 7, 123); margin: 0 auto;"> 
+                
+                
+
                 <strong>{{setgraphcoin}}</strong>
                 <select id="coords" style="display: none;">
                 </select>
@@ -225,9 +213,9 @@
                     }
 
                     Plotly.newPlot("chartarea", {
-                        autosize: false, responsive:true, showlegend:false, scrollZoom:true, showticks:false,
+                        autosize: true, responsive:true, showlegend:false, scrollZoom:true, showticks:false,
                         "data": [{ "x": test1,"y": test2 }],
-                        "layout": { "width": 933, "height": 434, gridcolor: "rgba(255,0,0,0)",plot_bgcolor:"rgba(0,0,0,0)",
+                        "layout": { gridcolor: "rgba(255,0,0,0)",plot_bgcolor:"rgba(0,0,0,0)",
                         paper_bgcolor:'rgba(0,0,0,0)', margin: { l:0, r:0, b:0, t:0,pad: 10},yaxis: {automargin:true, gridcolor:'black'}, xaxis: {automargin:true, gridcolor:'gray', type:'date'},'showlegend':false,
                         scrollZoom:true},
                         'config':{'displayModeBar':false, 'scrollZoom':true, 'showticks':false}
@@ -235,12 +223,9 @@
         
                 </script>
             </div>
-            <div style="width: max-content">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem fugit enim explicabo voluptates provident aut magni, perspiciatis corrupti praesentium repellendus, saepe excepturi. Enim sunt labore dignissimos unde tenetur earum nisi!
-
-            </div>
-                    </div>
-            <div class="col-lg-3" style="border: 1rem solid rgb(7, 7, 7); padding-left: .5rem; padding-right: .5rem; margin-left: 1rem; "> 
+            
+                  
+            <div class="col-lg-3" style="border: 1rem solid rgba(7, 7, 7, 0); padding-left: .5rem; padding-right: .5rem; position:relative; z-index: 1;"> 
             <div class="shadow rounded" style="padding-block-start: 1rem; height: min-content;">
             <div class="gradient-box" style=" margin: 0 auto; border-top-style:unset; 
            border-bottom-style:outset 1px; border-radius: 5%;border-radius: 1.27rem;"> 
@@ -402,8 +387,9 @@
 </body>
 
 <footer>
+    
     <div class="col" style="color: rgb(255, 212, 69); font-family: Verdana, Geneva, Tahoma, sans-serif; font-style: italic; font-size: large; width:fit-content;block-size: 10rem;">data provided by CoinGecko</div>
-    ... data provided by CoinGecko
+    
     <div class="col" id="footerright"></div>
 </footer>
 
