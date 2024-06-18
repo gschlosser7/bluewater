@@ -252,9 +252,10 @@ def hmpg():
             user = User.query.filter_by(username=form.username.data).first()
             if user:
                 if bcrypt.check_password_hash(user.password, form.password.data)==True:
+                    print('in here')
                     flash('loggedin')
                     login_user(user)
-                    session['username'] = form.username.data
+                    session['username'] = str(form.username.data)
                     if 'username' in session:
                         print('aa')
                         return redirect(url_for('forummain'))
@@ -262,10 +263,10 @@ def hmpg():
                     form=LoginForm(object=user)
                     try: 
                         if bcrypt.check_password_hash(user.password, form.password.data):
-                            return'g'
+                            return flash('login failed') 
                     except: 
-                        return 'a' 
-            return redirect(url_for('forummain'))
+                        return flash('login failed') 
+            
     print('last')
     return render_template('home.html', form=form)
 
@@ -273,7 +274,7 @@ def hmpg():
 def submit():
     form=registerForm()
     if request.method == 'POST': #and user is None:
-        session['username']=form.username.data
+        session['username']=str(form.username.data)
         username=form.username.data
         password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         print(password, '111')
@@ -314,6 +315,7 @@ def forummain():
     #at the top here somewhere do usercoinquantity * current price for each coin... add total to buying power
     #userAccountValue.query.filter_by(accountHolder=session['username']).delete()
     #db.session.commit()
+    #userCoinlistDel = userCoinlist.query.delete()
     #
     #coinGeckoCoinsList2.__tablename__.drop(create_engine)
     #rollback after the above
@@ -721,7 +723,7 @@ def instasearch():
     print(results2)
     if htmx:
         return render_template('coinsearch.html', results=results2)
-    return render_template('coinsearch.html', results=results2[::2])
+    return render_template('coinsearch.html', results=results2)
 
 @app.route('/quantity', methods=['GET','POST'])
 @login_required
@@ -831,16 +833,17 @@ def delete(watchlist):
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-    userCoinlistDel = userCoinlist.query.delete()
+    
     db.session.commit()
     form=registerForm()
     if request.method == ['POST']:
-        username=form.username.data
-        password=form.password.data
+        username=str(form.username.data)
+        password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         print(password)
         user=User(username, password)
         db.session.add(user)
         db.session.commit()
+        return redirect(url_for('hmpg'))
     return render_template('register.html', form=form)
 
 @app.route('/profile', methods=['POST', 'GET'])
@@ -890,11 +893,12 @@ def addComment():
         db.session.commit()
     return render_template('addcomment.html', form=form)
 
-@app.route('/plotly_dashboard', methods=['POST', 'GET']) 
+@app.route('/chart', methods=['POST', 'GET']) 
 def render_dashboard():
+    print('12313123123213')
     if 'username' in session:
         print(session['username'])
-        return flask.redirect('/pathname')
+        return redirect('/pathname')
     return redirect(url_for('logout'))
 #@server.route('/app1')
 #def app1_route():
@@ -911,18 +915,20 @@ cf = pd.DataFrame({
     'daterange': ['0','3']
 })
 
-board=Dash(__name__, requests_pathname_prefix="/app1/") #server=app param ?
+board=Dash(__name__,requests_pathname_prefix="/advanced_view/") #server=app param ?
 
 board.title='Financial Dashboard'
 #board._favicon = ("favico.ico")
 fig = px.line(df, x='daterange', y='')
 fig.add_scatter(x=df['daterange'], y=df['movingavg'])
 
+
 board.layout = html.Div(children=[
     html.H1(children='Financial Dashboard'),
     html.Div([
     dcc.Link('Go home', href='/forum'),
-    html.Br()]), 
+    html.Br()]),
+ 
     dbc.Container(html.Div(
     [
         html.Div("First item", className="bg-light border"),
@@ -948,6 +954,7 @@ fig.update_layout(title_font_family="Verdana",template='plotly_dark',margin_t=0,
     Output("user", "children"),
     Input("url", "pathname"),
 )
+
 def update_authentication_status(_):
     if current_user.is_authenticated:
         return dcc.Link("logout", href="/logout")
@@ -961,7 +968,7 @@ def update_authentication_status(_):
 #1: get session id of user and compare that against the session id they received at time of login. if true == response 200
 application = DispatcherMiddleware(
     app,
-    {"/app1": board.server}
+    {"/advanced_view": board.server}
 )
 
 if __name__== '__main__':
