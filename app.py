@@ -425,7 +425,7 @@ def forummain():
     ycoords=list(chartdata.values())
     print('clist,yscoords here, sma9=clist[::9], go backwards adding each 9 days before the current date( x value) and calc the total/9days. store these in database in poppable format?')
     xcoords=list(chartdata.keys())
-    
+    priceper=ycoords[((len(ycoords)-1))]
     #print(len(ycoords), len(clist))
     #get x,y coordinates for graph    
     #print(xcoords)
@@ -438,9 +438,15 @@ def forummain():
     if not watchlistcoins:
         url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cchainlink%2Csolana%2Chex%2Ctether&vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=0"
     else:
-        
-        mystr=''.join('%2C'+ watchlistcoins.coin)
-            
+        try:
+            mystr=''
+            loadwatchlist=json.loads(watchlistcoins.coin)
+            for x in loadwatchlist:
+                print(x)
+                mystr=mystr+''.join('%2C'+ x)
+                print(mystr,' okkokkokokokokokoookokkokokokokookookokookokokokoko')
+        except:
+            mystr=''.join('%2C'+ watchlistcoins.coin)
         furl = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana%2Chex%2Ctether"+mystr+"&vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=0"
         print('1',furl)
         url=furl
@@ -636,7 +642,7 @@ def forummain():
                 db.session.add(errorCoin)
                 db.session.commit()
                 print('88')
-                pass
+                return redirect(url_for('forummain'))
     try:   
         for x in cointlist:
             if x[0] == currentView.query.filter_by(curr_user=session['username']).first().coinBeingViewed:
@@ -657,6 +663,8 @@ def forummain():
         priceper=ycoords[((len(ycoords)-1))]
         newsell.pricepercoinSell.data=priceper
     
+       
+
         '''empty=''
         newpurchase.quantity.choices=[(None,''),('10','10'),('100','100'),('1000','1000')]
         if newpurchase.validate_on_submit():
@@ -757,31 +765,52 @@ def quantize():
 def add():
     #id, curruser, coin
     if request.method=='POST':
-        preselected = ['xrp', 'polygon', 'dogecoin', 'chainlink', 'Filecoin', 'filecoin', 'Tezos','tezos', 'Celo','celo','subsquid','Subsquid','wigger','Wigger'] #repleace this list with names in ohlc dataframe in forummain
+        #preselected = coinGeckoCoinsList3.query.filter_by(cgcoin=)
         curruser = session['username']
         print(curruser, 'curr')
-        item =  request.form['watch']
+        item = request.form['watch']
         print(item)
-        if item in preselected:
-            currlist=userCoinlist.query.filter_by(curruser=session['username']).first()
-            #currlist2=db.session.execute(db.select(userCoinlist).order_by(userCoinlist.curruser)).scalars()
-            print(currlist, 'currlist')
-            watch.append({'watch':item, 'removed':False})
-            if currlist:
-            #currlist=json.dumps(currlist)
-            #currlist=json.dumps(currlist+item)
-                currlist.coin=item
-                db.session.commit()
-                print(currlist,'7')
-            #print(json.dumps(watch))
-            #jsondumpswatch=json.dumps(watch)
-            #currlist=currlist+jsondumpswatch
-            #currlist=json.dumps(currlist)
-            else:
-                print('8')
-                newcoin=userCoinlist(curruser, item)
-                db.session.add(newcoin)
-                db.session.commit()
+        try:
+            if coinGeckoCoinsList3.query.filter_by(coin=item):
+                currlist=userCoinlist.query.filter_by(curruser=session['username']).first()
+                #currlist2=db.session.execute(db.select(userCoinlist).order_by(userCoinlist.curruser)).scalars()
+                print(currlist, 'currlist')
+                watch.append({'watch':item, 'removed':False})
+                if currlist:
+                #currlist=json.dumps(currlist)
+                #currlist=json.dumps(currlist+item)
+                    try:
+                        addWatch=json.loads(currlist.coin)
+                        addWatch[item]='True'
+                        print(addWatch)
+                        print('watchlist updated')
+                        currlist.coin=json.dumps(addWatch)
+                        db.session.commit()
+                        
+                    except:
+
+                        addWatch={}
+                        addWatch[item]='True'
+                        currlist.coin=json.dumps(addWatch)
+
+                        print('watchlist updated 2')
+                        db.session.commit()
+
+                    
+                    print(currlist,'71233123')
+                #print(json.dumps(watch))
+                #jsondumpswatch=json.dumps(watch)
+                #currlist=currlist+jsondumpswatch
+                #currlist=json.dumps(currlist)
+                else:
+                    print('8')
+                    item={str(item):'True'}
+                    item=json.dumps(item)
+                    newcoin=userCoinlist(curruser, item)
+                    db.session.add(newcoin)
+                    db.session.commit()
+        except:
+            flash('Coin not recognized')
     return redirect(url_for('forummain'))
 
 @app.route('/<coin>', methods=['GET','POST'])
