@@ -15,7 +15,8 @@ nav
     border-top: unset;
     border-left: unset;
     margin-left: 0rem;
-    position: sticky;
+    position: relative;
+    max-height: ;
     
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
@@ -90,7 +91,7 @@ body{
 }
 
 footer .col {
-    position: fixed; /* or - absolute - */
+    position: relative; /* or - absolute - */
     width: min-content;
     height: 60px;
     bottom: 0;
@@ -98,12 +99,8 @@ footer .col {
     display: flex;
     color: #000;
     opacity: 80%;
-    border-left: .5rem #11ff44 outset;
-    border-top: .3rem #11ff44 solid;
+
     
-    border-top-left-radius: 99vh;
-    border-top-right-radius: 10vh;
-    border-bottom-left-radius:10vh ;
   }
 
 
@@ -123,6 +120,7 @@ footer .col {
   
 
 }
+
 .table tbody tr{
     background-color: rgb(5, 5, 5);
     color: #0080FF;
@@ -131,11 +129,22 @@ footer .col {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-style: italic;
 }
-
-
+#userPortfolio{
+  background-color: whitesmoke;
+  color: blue;
+  border-color: red;
+}
+#totalCostSell{
+  visibility: hidden;
+}
+#totalcost{
+  visibility: hidden;
+}
 #chartarea{
-  height: 70vh;
+  height: 83vh;
   position: absolute;
+  border-radius: 1rem;
+  background-color: #0080ff0c;
 }
 
 #watchlist{
@@ -144,7 +153,7 @@ footer .col {
   
   position: relative;
   top: 0;
-  width: 100%;
+  
   scrollbar-width: thin;
   font-family:monospace;
   z-index: 1; 
@@ -156,8 +165,8 @@ footer .col {
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
     z-index: -1;
-    margin-top: .5rem;
-
+    
+    
     border-radius: 1rem;
     background: linear-gradient(to left, rgba(14,14,14), rgba(0, 60, 255, 0.185));
   }  
@@ -212,6 +221,12 @@ footer .col {
   font-size: small;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+#quantitySell{
+  background-color: slategray;
+  color: #141414;
+  border: 0px;
+}
+
 
 .gradient-box{
   height: 50%;
@@ -255,6 +270,7 @@ footer .col {
   border: unset;
   padding-left: 1rem;
   padding-right: 1rem;
+  visibility: hidden;
 }
 
 #buybutton{
@@ -266,6 +282,7 @@ footer .col {
   border: unset;
   padding-left: 1rem;
   padding-right: 1rem;
+  visibility: hidden;
   
 }
 
@@ -330,12 +347,14 @@ makeacc{
     margin-right: auto;
     display: flex;
     padding-top: 3%;
+    
 }
 
 @media (max-width:600px) {
   .wrapper-main{
     width:30%;
     height:100vh;
+    overflow-y: scroll;
   }
 }
 
@@ -343,7 +362,7 @@ makeacc{
   .wrapper-main{
     width:30%;
     height:100vh;
-    
+    overflow-y: scroll;
   }
 }
 
@@ -351,7 +370,7 @@ makeacc{
   .wrapper-main{
     width:30%;
     height:100vh;
-    
+    overflow-y: scroll;
   }
 }
 
@@ -359,6 +378,7 @@ makeacc{
   .wrapper-main{
     width:30%;
     height:100vh;
+    overflow-y: scroll;
     
   }
 }
@@ -366,6 +386,6 @@ makeacc{
   .wrapper-main{
     width:30%;
     height:100vh;
-    
+    overflow-y: scroll;
   }
 }
