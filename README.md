@@ -5,3 +5,5 @@ For the purpose of improving strategization while trading in the cryptocurrency 
 bluewater provides these tools:
 * a simple paper trading interface
 * AI chatbot
+
+![alt text](https://i.imgur.com/QguaQYR.png)
