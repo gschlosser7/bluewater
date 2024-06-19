@@ -95,7 +95,7 @@ class User(db.Model, UserMixin):
     
     @loginmanager.user_loader
     def load_user(id):
-        return User.query.get(int(id)) #return str(self.id)
+        return db.session.get(User,int(id)) #return str(self.id)
     
     @property
     def is_authenticated(self):
@@ -290,6 +290,7 @@ def submit():
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
+    logout_user()
     return redirect(url_for('hmpg'))
 
 watch=[{}]
@@ -619,6 +620,7 @@ def forummain():
         cointlist=[]
         buttonlist=[]
         tableh=['coin', 'price']
+        tablew=['coin','quantity','avg. cost']
         #make cointlist[::-1] column in new table that newpurchase form can get currentView price info from
         for i, v in enumerate(new):
             i = new[v]
@@ -692,7 +694,7 @@ def forummain():
     #make watchlist a class? a class of coins?
     if htmx:
         return render_template('coinsearch.html')
-    return render_template('forum.html', newsell=newsell, topPageHoldsView=topPageHoldsView, makeValue=makeValue, priceper=priceper, setgraphcoin=setgraphcoin,newpurchase=newpurchase, NestedQuantityForm=NestedQuantityForm,error=error, buttonlist=buttonlist, watch=watching, tableh=tableh, test=cointlist, clist=clist, ycoords=ycoords, ohlc=ohlc, purchaseform=purchaseform, newmessage=newmessage)
+    return render_template('forum.html', tablew=tablew, newsell=newsell, topPageHoldsView=topPageHoldsView, makeValue=makeValue, priceper=priceper, setgraphcoin=setgraphcoin,newpurchase=newpurchase, NestedQuantityForm=NestedQuantityForm,error=error, buttonlist=buttonlist, watch=watching, tableh=tableh, test=cointlist, clist=clist, ycoords=ycoords, ohlc=ohlc, purchaseform=purchaseform, newmessage=newmessage)
 @app.route('/search', methods=['GET','POST'])
 @login_required
 def instasearch():
@@ -710,7 +712,7 @@ def instasearch():
                 coinsearch=coinsearch.upper()
                 try:
                     ec=json.loads(x.coin)    
-                    if len(coinsearch)>1 and ec['name'][0]==coinsearch[0]:
+                    if len(coinsearch)>1:
                         print('it does')
                         grabname = ec.pop('name')        
                         results.append(grabname)
@@ -786,16 +788,13 @@ def add():
                         print('watchlist updated')
                         currlist.coin=json.dumps(addWatch)
                         db.session.commit()
-                        
+                     
                     except:
-
                         addWatch={}
                         addWatch[item]='True'
                         currlist.coin=json.dumps(addWatch)
-
                         print('watchlist updated 2')
                         db.session.commit()
-
                     
                     print(currlist,'71233123')
                 #print(json.dumps(watch))
