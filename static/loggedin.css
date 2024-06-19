@@ -272,7 +272,10 @@ footer .col {
   padding-right: 1rem;
   visibility: hidden;
 }
-
+#totalCostSell2{
+  font-size: small;
+  font-weight: 300;
+}
 #buybutton{
   background-color: #1f1f1f;
   color: #0080ffe3;

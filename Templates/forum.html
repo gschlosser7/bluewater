@@ -308,10 +308,10 @@
                                 (function(event) {
                                     
                                     var realtimecalc = document.getElementById("mytotal").innerHTML = String(jscalc*$("#myid").val());
-                                    if (Number(realtimecalc) == 0){
-                                    document.getElementById('buybutton').style.visibility = "hidden"; 
+                                    if (Number(realtimecalc) > 0){
+                                    document.getElementById('buybutton').style.visibility = "visible"; 
                                     } else {
-                                        document.getElementById('buybutton').style.visibility = "visible"; 
+                                        document.getElementById('buybutton').style.visibility = "hidden"; 
                                     }
                                     
                                 }).call(document.getElementById('myid'), event);
@@ -381,24 +381,25 @@
                                 <br>
                             
                         </form>
-                        <p id="totalCostSell" ></p>
-                        <script>
+                        <p id="totalCostSell2" >$</p>
+                        
+                        <script id="realtimecalcSell" type="text/javascript">
                             document.getElementById('profile').style.accentColor='#0080ffe3';
                             
                             document.getElementById('quantitySell').addEventListener("change", function(event) {
                                 (function(event) {
-                                    var jscalcSell=jscalc
-                                    var realtimecalcSell = document.getElementById("totalCostSell").innerHTML = String(jscalc*$("#quantitySell").val());
-                                    if (Number(realtimecalcSell) == 0){
-                                    document.getElementById('sellbutton').style.visibility = "hidden"; 
+                                   
+                                    var realtimecalcSell = document.getElementById("totalCostSell2").innerHTML = String(jscalc*$("#quantitySell").val());
+                                    if (Number(realtimecalcSell) > 0){
+                                    document.getElementById('sellbutton').style.visibility = "visible"; 
                                     } else {
-                                        document.getElementById('sellbutton').style.visibility = "visible"; 
+                                        document.getElementById('sellbutton').style.visibility = "hidden"; 
                                     }
                                     
                                 }).call(document.getElementById('quantitySell'), event);
                                 
-                                document.getElementById('totalCostSell').style.color = "#0080FF";
-                                document.getElementById('totalCostSell').style.alignContent = "space-between";
+                                document.getElementById('totalCostSell2').style.color = "#0080FF";
+                                document.getElementById('totalCostSell2').style.alignContent = "space-between";
 
                                 e.preventDefault();
                                 
