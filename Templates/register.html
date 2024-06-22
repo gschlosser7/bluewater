@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$$ moneybot $$</title>
+    <title>bluewater</title>
     <link rel="stylesheet" type="text/css" href="../static/loggedin.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
@@ -15,7 +15,7 @@
 </head>
 <body>
     <nav>
-        <div class="logo">moneybot.cc</div>
+        <div class="logo">bluewater</div>
     </nav>
     <div class="topnav"></div>
 
@@ -26,7 +26,7 @@
         <h2>
             <title>you have 3 attempts</title>
             <div class = 'shadow p-3 mb-5 bg-body rounded'></div>
-                <form method="POST" action="/submit" style="border: rgb(77, 77, 77) 1px groove;width:fit-content; align-content: center; margin: 0 auto; border-top-style:unset; 
+                <form id="regForm" method="POST" style="border: rgb(77, 77, 77) 1px groove;width:fit-content; align-content: center; margin: 0 auto; border-top-style:unset; 
                 color:rgb(44, 44, 44); border-bottom-style:unset; padding: 33px; border-radius: 12%; grid:10%">
                     {{ form.csrf_token }}
                     {{form.hidden_tag()}}
@@ -37,7 +37,11 @@
                     {{ form.password.label(class='form-label')}}
                     {{form.password(class='form')}}
                     <br>
-                    <input type="submit" value="Login" style="margin-left: 50%;">
+                    <button class="g-recaptcha" 
+                data-sitekey={{site_key}}
+                data-callback='onSubmit' 
+                data-action='submit'>Submit</button>
+
                 </form>
             </div>
     <!--
@@ -47,6 +51,13 @@
     <p id="passwordyy" style="text-indent: 0em;"><input type="password" name="password" required="required" /> </p>
     -->
     
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+        function onSubmit(token) {
+          document.getElementById("regForm").submit();
+        }
+      </script>
+
 
 
 </body>
