@@ -39,7 +39,7 @@ from flask_htmx import HTMX
 #
 loginmanager =  LoginManager()
 
-app = Flask(__name__, template_folder='./Templates', static_url_path='/./static')
+app = Flask(__name__, template_folder='./Templates', static_url_path='./static')
 
 #dash = Dash(__name__)
 htmx=HTMX()
@@ -888,26 +888,26 @@ def register():
     form=registerForm()
  
     GOOGLE_VERIFY_URL='https://www.google.com/recaptcha/api/siteverify'
-    if request.method == 'POST':
-        print('reg post')
-        if form.validate_on_submit():
-            print('form validated')
-            username=str(form.username.data)
-            password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            print(password)
-            user=User(username, password)
+    
+    print('reg post')
+    if form.validate_on_submit():
+        print('form validated')
+        username=str(form.username.data)
+        password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        print(password)
+        user=User(username, password)
+        
+        gsecret = request.form['g-recaptcha-response']
+        gresponse=requests.post(url=f'{GOOGLE_VERIFY_URL}?secret={GOOGLE_RECAPTCHA_SECRET_KEY}&response={gsecret}').json()
+        
+        print(gresponse)
+        if not gresponse['success'] or gresponse['score'] < 0.5:
+            print('fail')
             
-            gsecret = request.form['g-recaptcha-response']
-            gresponse=requests.post(url=f'{GOOGLE_VERIFY_URL}?secret={GOOGLE_RECAPTCHA_SECRET_KEY}&response={gsecret}').json()
-           
-            print(gresponse)
-            if not gresponse['success'] or gresponse['score'] < 0.5:
-                print('fail')
-                
-                redirect(url_for('hmpg'))
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for('hmpg'))
+            redirect(url_for('hmpg'))
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('hmpg'))
     return render_template('register.html', form=form, site_key=GOOGLE_RECAPTCHA_SITE_KEY)
 
 @app.route('/profile', methods=['POST', 'GET'])
