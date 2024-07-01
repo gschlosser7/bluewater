@@ -39,7 +39,7 @@ from flask_htmx import HTMX
 #
 loginmanager =  LoginManager()
 
-app = Flask(__name__, static_folder='./static', templates_folder='./Templates')
+app = Flask(__name__, static_url_path='./static', static_folder='./static', template_folder='./Templates')
 
 #dash = Dash(__name__)
 htmx=HTMX()
@@ -285,8 +285,9 @@ def submit():
     form=registerForm()
     GOOGLE_VERIFY_URL='https://www.google.com/recaptcha/api/siteverify'
     if request.method == ['POST']:
+        print('sub post')
         if form.validate_on_submit():
-
+            print('form val sub')
             username=str(form.username.data)
             password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
             print(password)
@@ -888,6 +889,7 @@ def register():
  
     GOOGLE_VERIFY_URL='https://www.google.com/recaptcha/api/siteverify'
     if request.method == 'POST':
+        print('reg post')
         if form.validate_on_submit():
             print('form validated')
             username=str(form.username.data)
