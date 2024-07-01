@@ -1037,4 +1037,4 @@ application = DispatcherMiddleware(
 
 if __name__== '__main__':
     #dash.run(debug=True)
-    run_simple("127.0.0.1", 8050, application, use_reloader=True)
+    run_simple("127.0.0.1", 8000, application, use_reloader=True)
