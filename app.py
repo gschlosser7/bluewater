@@ -38,11 +38,9 @@ from flask_htmx import HTMX
 #import hashlib or better hashing package
 #
 loginmanager =  LoginManager()
-try: 
-    app = Flask(__name__, templates_folder='./Templates')
-except:
-    print('notemplatesfolder')
-    app = Flask(__name__) #templates_folder='./Templates' for prod
+
+app = Flask(__name__, static_folder='./static', templates_folder='./Templates')
+
 #dash = Dash(__name__)
 htmx=HTMX()
 
