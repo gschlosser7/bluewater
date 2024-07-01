@@ -39,7 +39,7 @@ from flask_htmx import HTMX
 #
 loginmanager =  LoginManager()
 
-app = Flask(__name__, templates_folder='/Templates')
+app = Flask(__name__, templates_folder='./Templates', static_url_path='/./static')
 
 #dash = Dash(__name__)
 htmx=HTMX()
