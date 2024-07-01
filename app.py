@@ -36,11 +36,12 @@ from flask_htmx import HTMX
 #^something in this will fix the cannot import url_decode from werkzeug.urls error. 
 #oauth or something else for AAA
 #import hashlib or better hashing package
+#
 loginmanager =  LoginManager()
 try: 
     app = Flask(__name__, templates_folder='./Templates')
 except:
-
+    print('notemplatesfolder')
     app = Flask(__name__) #templates_folder='./Templates' for prod
 #dash = Dash(__name__)
 htmx=HTMX()
