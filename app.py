@@ -37,7 +37,11 @@ from flask_htmx import HTMX
 #oauth or something else for AAA
 #import hashlib or better hashing package
 loginmanager =  LoginManager()
-app = Flask(__name__)
+try: 
+    app = Flask(__name__, templates_folder='./Templates')
+except:
+
+    app = Flask(__name__) #templates_folder='./Templates' for prod
 #dash = Dash(__name__)
 htmx=HTMX()
 
@@ -220,14 +224,14 @@ class newPurchase(FlaskForm):
     #price get price value from currentView THEN make ohlc or simple price request at point of transaction.
     pricepercoin=StringField('price')
     quantity=SelectField('quantity', choices=[(None,''),('10','10'),('100','100'),('1000','1000')], default='', validate_choice=False)
-    totalcost=StringField('total' )
+    totalcost=StringField('total', default='' )
     #time will be datetime column, maybe use the time from the coingecko data?
     buy=SubmitField('BUY')
 class newSell(FlaskForm):
     coindrop=StringField('coin')
     pricepercoinSell=StringField('price')
     quantitySell=StringField('quantity', validators=[DataRequired()])
-    totalcostSell=StringField('total' )
+    totalcostSell=StringField('total', default='' )
     #time will be datetime column, maybe use the time from the coingecko data?
     sell=SubmitField('sell')
 
@@ -236,40 +240,44 @@ class nestedQuantityForm(FlaskForm):
     quantize=SelectField('quantity', choices=preselectedBuyAmounts2, validators=[DataRequired()], validate_choice=False)
     buy=SubmitField('BUY')#use submit buttons plural that auto update a "total" outside of the form
 
-#class GRCForm(FlaskForm):
 
-
+print('77')
 #app.context().push() possibly
 with app.app_context():
+
     db.create_all() #create above tables, forms are there for convenience they aren't committed
+    print('78')
     db.session.commit()
+    print('79')
 
 @app.route('/', methods=['POST','GET'])
 def hmpg():
     form = LoginForm()
     if request.method == 'POST':
         print('csrf')
-        if form.username.data and form.validate_on_submit():
-            print('form validated')
-            usernameinput = str(form.username.data)
-            user = User.query.filter_by(username=usernameinput).first()
-            if user:
-                if bcrypt.check_password_hash(user.password, form.password.data)==True:
-                    print('in here')
-                    flash('loggedin')
-                    login_user(user)
-                    session['username'] = usernameinput
-                    if 'username' in session:
-                        print('aa')
-                        return redirect(url_for('forummain'))
-                else:
-                    form=LoginForm(object=user)
-                    try: 
-                        if bcrypt.check_password_hash(user.password, form.password.data):
+        try:
+            if form.username.data and form.validate_on_submit():
+                print('form validated')
+                usernameinput = str(form.username.data)
+                user = User.query.filter_by(username=usernameinput).first()
+                if user:
+                    if bcrypt.check_password_hash(user.password, form.password.data)==True:
+                        print('in here')
+                        flash('loggedin')
+                        login_user(user)
+                        session['username'] = usernameinput
+                        if 'username' in session:
+                            print('aa')
+                            return redirect(url_for('forummain'))
+                    else:
+                        form=LoginForm(object=user)
+                        try: 
+                            if bcrypt.check_password_hash(user.password, form.password.data):
+                                return flash('login failed') 
+                        except: 
                             return flash('login failed') 
-                    except: 
-                        return flash('login failed') 
-            
+        except Exception as e:
+            print(e,'e1e1e1e1')
     print('last')
     return render_template('home.html', form=form)
 
@@ -290,7 +298,7 @@ def submit():
             print(gresponse)
             if not gresponse['success'] or gresponse['score'] < 0.5:
                 print('fail')
-                ('captcha failed please try again')
+                
                 redirect(url_for('hmpg'))
             db.session.add(user)
             db.session.commit()
@@ -298,6 +306,7 @@ def submit():
     return render_template('register.html', form=form, site_key=GOOGLE_RECAPTCHA_SITE_KEY)
     
 @app.route('/logout')
+@login_required
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
@@ -893,7 +902,7 @@ def register():
             print(gresponse)
             if not gresponse['success'] or gresponse['score'] < 0.5:
                 print('fail')
-                ('captcha failed please try again')
+                
                 redirect(url_for('hmpg'))
             db.session.add(user)
             db.session.commit()
@@ -1027,4 +1036,4 @@ application = DispatcherMiddleware(
 
 if __name__== '__main__':
     #dash.run(debug=True)
-    run_simple("localhost", 8050, application, use_reloader=True)
+    run_simple("127.0.0.1", 8050, application, use_reloader=True)
