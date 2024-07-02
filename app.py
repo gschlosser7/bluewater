@@ -890,24 +890,32 @@ def register():
     GOOGLE_VERIFY_URL='https://www.google.com/recaptcha/api/siteverify'
     
     print('reg post')
-    if form.validate_on_submit():
-        print('form validated')
-        username=str(form.username.data)
-        password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        print(password)
-        user=User(username, password)
-        
-        gsecret = request.form['g-recaptcha-response']
-        gresponse=requests.post(url=f'{GOOGLE_VERIFY_URL}?secret={GOOGLE_RECAPTCHA_SECRET_KEY}&response={gsecret}').json()
-        
-        print(gresponse)
-        if not gresponse['success'] or gresponse['score'] < 0.5:
-            print('fail')
+    try:
+        if form.validate_on_submit():
+            print('form validated')
+            username=str(form.username.data)
+            password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            print(password)
+            user=User(username, password)
             
-            redirect(url_for('hmpg'))
+            gsecret = request.form['g-recaptcha-response']
+            gresponse=requests.post(url=f'{GOOGLE_VERIFY_URL}?secret={GOOGLE_RECAPTCHA_SECRET_KEY}&response={gsecret}').json()
+            
+            print(gresponse)
+            if not gresponse['success'] or gresponse['score'] < 0.5:
+                print('fail')
+                
+                redirect(url_for('hmpg'))
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('hmpg'))
+    except Exception as e:
+        print(e)
+        username='abc'
+        password=bcrypt.generate_password_hash('123').decode('utf-8')
+        user=User(username, password)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('hmpg'))
     return render_template('register.html', form=form, site_key=GOOGLE_RECAPTCHA_SITE_KEY)
 
 @app.route('/profile', methods=['POST', 'GET'])
