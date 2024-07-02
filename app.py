@@ -251,12 +251,7 @@ with app.app_context():
 
 @app.route('/', methods=['POST','GET'])
 def hmpg():
-    form = LoginForm()
-    username='abc'
-    password=bcrypt.generate_password_hash('123').decode('utf-8')
-    user=User(username, password)
-    db.session.add(user)
-    db.session.commit()
+    print('honey im home')
     if request.method == 'POST':
         print('csrf')
         try:
