@@ -251,7 +251,8 @@ with app.app_context():
 
 @app.route('/', methods=['POST','GET'])
 def hmpg():
-    print('honey im home')
+    form = LoginForm()
+    
     if request.method == 'POST':
         print('csrf')
         try:
