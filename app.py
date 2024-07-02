@@ -1037,4 +1037,5 @@ application = DispatcherMiddleware(
 
 if __name__== '__main__':
     #dash.run(debug=True)
-    app.run(debug=True, port=8000)
+    app.run()
+    #maybe use a main() function for app above and call it here?
