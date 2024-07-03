@@ -62,6 +62,7 @@ GOOGLE_RECAPTCHA_SECRET_KEY=os.getenv('GOOGLE_RECAPTCHA_SECRET_KEY')
 url = os.getenv('DATABASE_URL')
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
+db.init_app(app)
 migrate=Migrate(app,db, command='migrate', compare_type=True) # think this was alr fixed because migrate isnt used anymore but idk leaving this just in case
 htmx=HTMX(app)
 
