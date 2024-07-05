@@ -39,9 +39,9 @@ from flask_htmx import HTMX
 #
 loginmanager =  LoginManager()
 
-def create_app():
-    app = Flask(__name__, template_folder='./Templates')
-    return app
+#def create_app():
+    #app = Flask(__name__, template_folder='./Templates')
+    #return app
 app = Flask(__name__, template_folder='./Templates')
 
 #dash = Dash(__name__)
@@ -244,7 +244,7 @@ class nestedQuantityForm(FlaskForm):
 
 
 print('77')
-#app.context().push() possibly
+app.app_context().push()
 with app.app_context():
 
     db.create_all() #create above tables, forms are there for convenience they aren't committed
@@ -256,31 +256,31 @@ with app.app_context():
 def hmpg():
     form = LoginForm()
     
-    if request.method == 'POST':
-        print('csrf')
-        try:
-            if form.username.data and form.validate_on_submit():
-                print('form validated')
-                usernameinput = str(form.username.data)
-                user = User.query.filter_by(username=usernameinput).first()
-                if user:
-                    if bcrypt.check_password_hash(user.password, form.password.data)==True:
-                        print('in here')
-                        flash('loggedin')
-                        login_user(user)
-                        session['username'] = usernameinput
-                        if 'username' in session:
-                            print('aa')
-                            return redirect(url_for('forummain'))
-                    else:
-                        form=LoginForm(object=user)
-                        try: 
-                            if bcrypt.check_password_hash(user.password, form.password.data):
-                                return flash('login failed') 
-                        except: 
+    
+    print('csrf')
+    try:
+        if form.username.data and form.validate_on_submit():
+            print('form validated')
+            usernameinput = str(form.username.data)
+            user = User.query.filter_by(username=usernameinput).first()
+            if user:
+                if bcrypt.check_password_hash(user.password, form.password.data)==True:
+                    print('in here')
+                    flash('loggedin')
+                    login_user(user)
+                    session['username'] = usernameinput
+                    if 'username' in session:
+                        print('aa')
+                        return redirect(url_for('forummain'))
+                else:
+                    form=LoginForm(object=user)
+                    try: 
+                        if bcrypt.check_password_hash(user.password, form.password.data):
                             return flash('login failed') 
-        except Exception as e:
-            print(e,'e1e1e1e1')
+                    except: 
+                        return flash('login failed') 
+    except Exception as e:
+        print(e,'e1e1e1e1')
     print('last')
     return render_template('home.html', form=form)
 
