@@ -42,8 +42,10 @@ loginmanager =  LoginManager()
 #def create_app():
     #app = Flask(__name__, template_folder='./Templates')
     #return app
-app = Flask(__name__, template_folder='./Templates')
-
+def create_app():
+    app = Flask(__name__, template_folder='./Templates')
+    return app
+app=create_app()
 #dash = Dash(__name__)
 htmx=HTMX()
 
