@@ -56,6 +56,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') #'secretkey'
 app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = None
+app.config["DEBUG"] = True
 #SESSION_COOKIE_SECURE and REMEMBER_COOKIE_SECURE = True
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 GOOGLE_RECAPTCHA_SITE_KEY=os.getenv('GOOGLE_RECAPTCHA_SITE_KEY')
@@ -258,37 +259,44 @@ with app.app_context():
 def hmpg():
     form = LoginForm()
     
-    
     print('csrf')
-    try:
-        if form.username.data and form.validate_on_submit():
-            print('form validated')
-            usernameinput = str(form.username.data)
-            user = User.query.filter_by(username=usernameinput).first()
-            
-            if user:
-                if bcrypt.check_password_hash(user.password, form.password.data)==True:
-                    print('in here')
-                    flash('loggedin')
-                    login_user(user)
-                    session['username'] = usernameinput
-                    if 'username' in session:
-                        print('aa')
-                        return redirect(url_for('forummain'))
-                else:
-                    form=LoginForm(object=user)
-                    try: 
-                        if bcrypt.check_password_hash(user.password, form.password.data):
-                            return flash('login failed') 
-                    except: 
+    
+    if form.username.data and form.validate_on_submit():
+        print('form validated')
+        usernameinput = str(form.username.data)
+        user = User.query.filter_by(username=usernameinput).first()
+        
+        if user:
+            if bcrypt.check_password_hash(user.password, form.password.data)==True:
+                print('in here')
+                flash('loggedin')
+                login_user(user)
+                session['username'] = usernameinput
+                if 'username' in session:
+                    print('aa')
+                    return redirect(url_for('forummain'))
+            else:
+                form=LoginForm(object=user)
+                try: 
+                    if bcrypt.check_password_hash(user.password, form.password.data):
                         return flash('login failed') 
-    except Exception as e:
-        print(e,'e1e1e1e1')
+                except: 
+                    return flash('login failed') 
+
     try:
         print(request.form['homeForm'])
-        print(request.form.get('homeForm'))
+        
     except Exception as e:
         print(e)
+    try:
+        print(request.form.get('homeForm'))
+    except Exception as e:
+        print(e, '@ req form get')
+    try:
+        print(request.args.get('homeForm'))
+    except Exception as e:
+        print(e, '@ req args get')
+
     print('last')
     return render_template('home.html', form=form)
 
