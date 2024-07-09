@@ -265,6 +265,7 @@ def hmpg():
             print('form validated')
             usernameinput = str(form.username.data)
             user = User.query.filter_by(username=usernameinput).first()
+            
             if user:
                 if bcrypt.check_password_hash(user.password, form.password.data)==True:
                     print('in here')
@@ -283,6 +284,11 @@ def hmpg():
                         return flash('login failed') 
     except Exception as e:
         print(e,'e1e1e1e1')
+    try:
+        print(request.form['homeForm'])
+        print(request.form.get('homeForm'))
+    except Exception as e:
+        print(e)
     print('last')
     return render_template('home.html', form=form)
 
@@ -896,32 +902,27 @@ def register():
     GOOGLE_VERIFY_URL='https://www.google.com/recaptcha/api/siteverify'
     
     print('reg post')
-    try:
-        if form.validate_on_submit():
-            print('form validated')
-            username=str(form.username.data)
-            password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            print(password)
-            user=User(username, password)
-            
-            gsecret = request.form['g-recaptcha-response']
-            gresponse=requests.post(url=f'{GOOGLE_VERIFY_URL}?secret={GOOGLE_RECAPTCHA_SECRET_KEY}&response={gsecret}').json()
-            
-            print(gresponse)
-            if not gresponse['success'] or gresponse['score'] < 0.5:
-                print('fail')
-                
-                redirect(url_for('hmpg'))
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for('hmpg'))
-    except Exception as e:
-        print(e)
-        username='abc'
-        password=bcrypt.generate_password_hash('123').decode('utf-8')
+    
+    if form.validate_on_submit():
+        print('form validated')
+        username=str(form.username.data)
+        password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        print(password)
         user=User(username, password)
+        
+        gsecret = request.form['g-recaptcha-response']
+        gresponse=requests.post(url=f'{GOOGLE_VERIFY_URL}?secret={GOOGLE_RECAPTCHA_SECRET_KEY}&response={gsecret}').json()
+        
+        print(gresponse)
+        if not gresponse['success'] or gresponse['score'] < 0.5:
+            print('fail')
+            
+            redirect(url_for('hmpg'))
         db.session.add(user)
         db.session.commit()
+        return redirect(url_for('hmpg'))
+    print(request.form['regForm'])
+
     return render_template('register.html', form=form, site_key=GOOGLE_RECAPTCHA_SITE_KEY)
 
 @app.route('/profile', methods=['POST', 'GET'])

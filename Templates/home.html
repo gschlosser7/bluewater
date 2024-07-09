@@ -45,7 +45,7 @@
         <h2>
             
             <div class = 'shadow p-3 mb-5 bg-body rounded'></div>
-                <form method="POST" action="{{url_for('hmpg')}}" align="low-opacity-bg-image" style="border: rgb(77, 77, 77) .33rem solid;width:fit-content; align-content: center; margin: 0 auto; 
+                <form method="POST" id="homeForm" action="{{url_for('hmpg')}}" align="low-opacity-bg-image" style="border: rgb(77, 77, 77) .33rem solid;width:fit-content; align-content: center; margin: 0 auto; 
                 color:rgb(44, 44, 44); padding: 33px; border-radius: 1rem; grid:10%">
                     {{ form.csrf_token }}
                     {{form.hidden_tag()}}
