@@ -43,7 +43,7 @@ loginmanager =  LoginManager()
     #app = Flask(__name__, template_folder='./Templates')
     #return app
 
-app = flask.Flask(__name__, template_folder='./Templates')
+app = flask.Flask(__name__, template_folder='./Templates', instance_relative_path=True)
 
 #dash = Dash(__name__)
 htmx=HTMX()
@@ -903,7 +903,6 @@ def delete(watchlist):
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     
-    
     form=registerForm()
  
     GOOGLE_VERIFY_URL='https://www.google.com/recaptcha/api/siteverify'
@@ -928,8 +927,11 @@ def register():
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('hmpg'))
-    print(request.form['regForm'])
-
+    try:
+        formcheck=request.form['regForm']
+        print(formcheck,'@fc')
+    except Exception as e:
+        print(e)
     return render_template('register.html', form=form, site_key=GOOGLE_RECAPTCHA_SITE_KEY)
 
 @app.route('/profile', methods=['POST', 'GET'])
