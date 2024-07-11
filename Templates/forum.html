@@ -28,6 +28,15 @@
 </head>
 
 <nav>
+    <div class="col" style="position: absolute; align-content: end; width: 100%; text-align: end;">
+    
+        <a href="{{url_for('profile')}}">
+            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" style="height: 50px; width: 50px; display: inline;">
+            </a>
+    
+        <a href="/logout" style="justify-content: right;">logout</a>
+            
+    </div>
     <div class="col-lg-3">
     <div class="logo" style="font-style: italic; padding-right: 1rem; padding-left: .3rem; font-size: xx-large;">bluewater.ai</div>
     <div class="logo" style="font-size: 16px; font-size: medium; margin-inline-start: 3%; opacity: 80%; color: rgb(77,77,77); filter: contrast(100%); filter: blur(.03rem)">ai advised trading station</div>
@@ -66,15 +75,8 @@
         </div>
         </div> 
 </div>
-<div class="col-lg-3" style="width: min-content; margin-right: -50%; margin-left: 20%;">
 
-    <a href="{{url_for('profile')}}">
-        <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" style="height: 50px; width: 50px; display: inline;">
-        </a>
 
-    <a href="/logout" style="justify-content: right;">logout</a>
-        
-</div>
 </nav>
 
 <body>

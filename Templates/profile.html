@@ -14,15 +14,18 @@
 
 <body style="margin-bottom: 256px;">
 
-    <nav>
-        <div class="logo" style="font-style: italic;">bluewater</div>
-        <div class="logo" style="font-size: 16px; padding-top:5px; font-size: medium; margin-inline-start: 3%; opacity: 80%; color: rgb(255, 36, 244); filter: contrast(100%); filter: blur(.03rem)">ai advised trading station</div>
-        <nav style="padding-left: 33%;">
-            <a href="/forum" >forum</a>
-        </nav>
+    <nav style="border-right-style: unset;">
+        <div class="logo" style="font-style: italic; padding-right: 1rem; padding-left: .3rem; font-size: xx-large; color:#0080FF">bluewater.ai</div>
+        <div class="logo" style="font-size: 16px; padding-top:5px; font-size: medium; margin-inline-start: 3%; opacity: 80%; color: rgb(77,77,77); filter: contrast(100%); filter: blur(.03rem)">ai advised trading station</div>
+        
     </nav>
-    <a href="/logout" style="padding-left: 95%;">logout</a>
-
+    <div style="text-align: end; margin-right: 1rem;">
+        <a href="/logout">logout</a>
+    </div>
+    <div style="text-align: center;">
+    <a href="/forum" >forum</a>
+    
+    </div>
     {% if current_user.is_authenticated %}
     <div class="card">
         <div class="card-wrapper" style="border: rgb(77, 77, 77) 1px groove;width:fit-content; align-content: center; margin: 0 auto; border-top-style:unset; 

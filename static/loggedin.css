@@ -16,8 +16,8 @@ nav
     border-left: unset;
     margin-left: 0rem;
     position: relative;
-    max-height: ;
-    
+
+    border-right: unset;
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
 .dropdown{
