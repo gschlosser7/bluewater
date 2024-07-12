@@ -1,5 +1,6 @@
 head{
   position: fixed;
+  background-color: #111111;
 }
 nav
 {
@@ -121,7 +122,7 @@ footer .col {
     display: flex;
     color: #000;
     opacity: 80%;
-
+    
     
   }
 
@@ -202,7 +203,10 @@ footer .col {
   background-color: #141414;
   
 }
-
+.dropdown-menu .active{
+  border: 0px;
+  visibility: hidden;
+}
 .nav-tabs .nav-item .nav-link.active {
   color: #777;
 }
