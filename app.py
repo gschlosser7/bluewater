@@ -43,7 +43,7 @@ loginmanager =  LoginManager()
     #app = Flask(__name__, template_folder='./Templates')
     #return app
 
-app = flask.Flask(__name__, template_folder='./Templates', instance_relative_path=True)
+app = flask.Flask(__name__, template_folder='./Templates', instance_relative_config=True)
 
 #dash = Dash(__name__)
 htmx=HTMX()
@@ -54,8 +54,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 #pass pgpass.conf, wherever that is, instead of raw pass
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') #'secretkey'
 app.config["SESSION_COOKIE_SECURE"] = True
-app.config["SESSION_COOKIE_SAMESITE"] = None
+app.config["SESSION_COOKIE_SAMESITE"] = 'Lax'
 app.config["DEBUG"] = True
+app.config["SEND_FILE_MAX_AGE_DEFAULT"]= 0
 #SESSION_COOKIE_SECURE and REMEMBER_COOKIE_SECURE = True
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 GOOGLE_RECAPTCHA_SITE_KEY=os.getenv('GOOGLE_RECAPTCHA_SITE_KEY')
@@ -259,6 +260,8 @@ def hmpg():
     form = LoginForm()
     
     print('csrf')
+    if 'username' in session:
+        return redirect(url_for('logout'))
     
     if form.username.data and form.validate_on_submit():
         print('form validated')
@@ -497,6 +500,9 @@ def forummain():
     #GET RID OF RAW URLs
     headers = {"Authorization": ACCESS_TOKEN, "accept": "application/json"}
     response = requests.get(url, headers=headers)
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, public, max-age=0"
+    #response.headers["Pragma"] = "no-cache"
+    #response.headers["Expires"] = "0"
     newmessage='test message'
     if request.method=='POST':
         print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
@@ -749,18 +755,45 @@ def instasearch():
         results= coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains(coinsearch)).limit(100).all()
         print('SEARCHING')
         for x in results:
+            print(x)
             try:
+                print('trying coin search upper on x at this point')
                 coinsearch=coinsearch.upper()
                 try:
-                    ec=json.loads(x.coin)    
+                    print('ec test')
+                    ec=json.loads(x.coin)
+                    print('ec is json loaded x.coin')
                     if len(coinsearch)>1:
                         print('it does')
-                        grabname = ec.pop('name')        
+                        grabname = ec.pop('name')
                         results.append(grabname)
+                except Exception as e:
+                    print(e)
+                try:
+                    ec=x.coin
+                    print(ec, ' this is the raw ec output from results')
+                    results.append(ec)
                 except Exception as e:
                     print(e)
             except Exception as e:
                 print(e)
+        '''if coinsearch:
+            print('SEARCHING...')
+            results= coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains(coinsearch)).limit(100).all()
+            print('SEARCHING')
+            for x in results:
+                try:
+                    coinsearch=coinsearch.upper()
+                    try:
+                        ec=json.loads(x.coin)    
+                        if len(coinsearch)>1:
+                            print('it does')
+                            grabname = ec.pop('name')        
+                            results.append(grabname)
+                    except Exception as e:
+                        print(e)
+                except Exception as e:
+                    print(e)'''
     else:
         results=[]
     results2=[]
