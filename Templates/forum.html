@@ -49,15 +49,21 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"  style="color: rgb(100, 100, 100); background-color: #141414; max-width: fit-content; position: absolute;">      
                     
                     <table >
-                        <tbody">
+                        <tbody>
+                        
                         <tr >
                             <td>
-                            <a href="{{url_for('logout')}}" style="justify-content: right; font-size: large; margin-left: 1rem;">logout</a>
+                            <a href="{{url_for('profile')}}" style="justify-content: right; font-size: large; margin-left: 1rem;">profile</a>
                         </td>
                         </tr>
                         <tr >
                             <td>
-                            <a href="{{url_for('profile')}}" style="justify-content: right; font-size: large; margin-left: 1rem;">profile</a>
+                            <a href="{{url_for('addComment')}}" style="justify-content: right; font-size: large; margin-left: 1rem;">comment</a>
+                        </td>
+                        </tr>
+                        <tr >
+                            <td>
+                            <a href="{{url_for('logout')}}" style="justify-content: right; font-size: large; margin-left: 1rem;">logout</a>
                         </td>
                         </tr>
                     </tbody>
@@ -73,7 +79,7 @@
     </div>
     <div class="col-lg-3">
     <div class="logo" style="font-style: italic; padding-right: 1rem; padding-left: .3rem; font-size: xx-large;">bluewater.ai</div>
-    <div class="logo" style="font-size: 16px; font-size: medium; margin-inline-start: 3%; opacity: 80%; color: rgb(77,77,77); filter: contrast(100%); filter: blur(.03rem)">ai advised trading station</div>
+    <div class="logo" style="font-size: 16px; font-size: medium; margin-inline-start: 3%; opacity: 80%; color: rgba(43, 255, 0, 0.959); filter: contrast(100%); filter: blur(.03rem)">data provided by CoinGecko</div>
 </div>
 <div class="col-lg-6" style="margin-top: .5rem; position: relative;">
     <div class="col-lg-3" style="font-weight: 300; inset-inline-start: -.5rem; font-size: medium;">
@@ -174,7 +180,7 @@
                     
                 </table>
                 
-                <script>
+                <script style="visibility: hidden;">
                     document.addEventListener("DOMContentLoaded", () => {
                         const rows =  document.querySelectorAll("tr[data-href]");
                         rows.forEach(row=>{
@@ -458,13 +464,9 @@
             </div>
     </div>
     </div>
+    
 </body>
 
-<footer>
-    
-    <div class="col" style="color: rgb(255, 212, 69); font-family: Verdana, Geneva, Tahoma, sans-serif; font-style: italic; font-size: large; width:fit-content;">data provided by CoinGecko</div>
-    
-    <div class="col" id="footerright"></div>
-</footer>
+
 
 </html>

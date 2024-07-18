@@ -15,7 +15,7 @@ from wtforms.widgets import TextArea
 from sqlalchemy import JSON, String, TypeDecorator
 from sqlalchemy.dialects.postgresql import JSONB
 from flask_jwt_extended import create_access_token
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import os
 from flask_migrate import Migrate
 import bcrypt
@@ -33,10 +33,11 @@ from pycoingecko import CoinGeckoAPI
 import psycopg2 as pg
 import datetime
 from flask_htmx import HTMX
+import time as time
 #^something in this will fix the cannot import url_decode from werkzeug.urls error. 
 #oauth or something else for AAA
 #import hashlib or better hashing package
-#
+
 loginmanager =  LoginManager()
 
 #def create_app():
@@ -183,6 +184,17 @@ class cgList(db.Model):
     coin=db.Column(db.String(80), unique=False)
     def __init__(self, cgcoin):
         self.cgcoin=cgcoin
+class lastAPICall(db.Model):
+    id=db.Column(db.Integer(), primary_key=True)
+    timeposted=db.Column(db.DateTime, default=datetime.datetime.now(datetime.UTC))
+    def __init__(self, time):
+        self.time=time
+class lastAPICall2(db.Model):
+    id=db.Column(db.Integer(), primary_key=True)
+    timeposted=db.Column(db.DateTime, default=datetime.datetime.now(datetime.UTC))
+    def __init__(self, time):
+        self.time=time
+
 #USER MAkes purchase --> form containing account dollar value auto updates default=1mil into default - purchaseamount=new default? or change it to db value
 
 '''class userEmail(db.Model):
@@ -393,8 +405,36 @@ def forummain():
     cg = CoinGeckoAPI()
     watchlist=currentView.query.filter_by(curr_user=session['username']).first()
     #raise exception for response 500 to change watchlist.coin to bitcoin or something. coingecko data doesnt come through for some coins.
-
     
+    lastapicall = lastAPICall2.query.first()
+    
+    if lastapicall:
+        print(lastapicall.timeposted,'1111111111111111111111111111111111111111111111')
+        #lastapicall = lastapicall.timeposted.replace(tzinfo=datetime.UTC)
+        print('lower utc', datetime.datetime.now(datetime.timezone.utc))
+        rightnow=datetime.datetime.now(tz=datetime.timezone.utc).timestamp()
+        
+        print(lastapicall.timeposted+timedelta(minutes=1))
+        lastapicallandtimedelta = lastapicall.timeposted+timedelta(minutes=1)
+        lastapicallandtimedelta=lastapicallandtimedelta.timestamp()
+        print('123123123123', lastapicallandtimedelta)
+        if rightnow > lastapicallandtimedelta:
+            lastapicall.timeposted=datetime.datetime.now(datetime.timezone.utc)
+            db.session.commit()
+            pass
+        else:
+            time.sleep(60)
+    else:
+        firstapicalltime=lastAPICall2(timeposted=datetime.datetime.now(datetime.UTC))
+        db.session.add(firstapicalltime)
+        db.session.commit()
+    
+    
+    
+    #apicalltime=lastAPICall(datetime.datetime.now(datetime.UTC))
+    #db.session.commit()
+
+    #timeposted=db.Column(db.DateTime, default=datetime.datetime.now(datetime.UTC))
     #get accValue
     getValue=userAccountValue.query.filter_by(accountHolder=session['username']).first()
     if getValue:
@@ -477,7 +517,7 @@ def forummain():
     #usercoins=json.loads(usercoins)
     #for x in usercoins:
     #    print(x, 'here')
-    watchlistcoins= userCoinlist.query.filter_by(curruser=session['username']).first()
+    watchlistcoins= userCoinlist.query.filter_by(curruser=session['username']).first() #get user watchlist from db and building api request below for pricing
     if not watchlistcoins:
         url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cchainlink%2Csolana%2Chex%2Ctether&vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=0"
     else:
@@ -487,7 +527,7 @@ def forummain():
             for x in loadwatchlist:
                 print(x)
                 mystr=mystr+''.join('%2C'+ x)
-                print(mystr,' okkokkokokokokokoookokkokokokokookookokookokokokoko')
+                print(mystr)
         except:
             mystr=''.join('%2C'+ watchlistcoins.coin)
         furl = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana%2Chex%2Ctether"+mystr+"&vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=0"
@@ -505,7 +545,6 @@ def forummain():
     #response.headers["Expires"] = "0"
     newmessage='test message'
     if request.method=='POST':
-        print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
         if purchaseform.validate_on_submit():
             purchase=Purchases(coinpurchased=purchaseform.coinpurchased.data, quantity=purchaseform.quantity.data, timepurchased=purchaseform.timepurchased.data)
             #user = User.query.filter_by(username=form.username.data).first()
