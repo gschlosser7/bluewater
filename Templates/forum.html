@@ -92,27 +92,32 @@
           </svg>buying power {% if makeValue %} <strong>{{ makeValue }} </strong>{% endif %}</strong>
           <br>
           </div>
-        <div class="col-lg-3" style="overflow-y: scroll; height:8vh;scrollbar-width: thin; ">
-            <div class="scrollable-table" style="color: #0080FF; font-weight: 200; scrollbar-width: thin; scrollbar-color: #777; font-size: medium; margin: 0 auto; border-color: #777;">
-                <tbody style="border-color: white; color: white;">
-                <thead style="color: #0080FF; margin-top:-2rem; align-content: center; background-color: #777;">
+        <div class="col-lg-4" style="overflow-y: scroll; height:8vh;scrollbar-width: thin; ">
+            <div class="scrollable-table" style="border-collapse: collapse; color: #0080FF; font-weight: 400; font-size: small; scrollbar-width: thin;">
                     
-                </thead>
-                    <tr>
+                    <tr id="portfolioheader">
+                        <nav style="border-bottom-left-radius: .5rem;">
                         {% for w in tablew %}
+                        <div class="col-lg-4" style="text-align: start; border: #0080FF .1rem; font-size: large;">
                         <td>{{w}}</td>
+                        </div>
                         {% endfor %}
-                    </tr>
+                    </nav>
+                </tr>
+                    
                     {% if topPageHoldsView != None %}
                     {% for x in topPageHoldsView %}
                     {% if x in buttonlist %} <br> {% endif %}
+                    
+                    <div class="col-lg-4" >
                     <tr id="userPortfolio" style="border-color: slategrey; border: .1rem silver solid;">
-                    <td style="font-weight: 300; color: slategrey; ">{{x}}</td>
+                    <td style="font-weight: 300; color: slategrey;">{{x}}</td>
                     </tr>
+                </div>
                     {% endfor %}
                     {% endif %}
-            </tbody>
-        </div>
+                
+            </div>
         </div> 
 </div>
 
@@ -133,7 +138,7 @@
             
             <div class=".col-lg-3" id="watchlist" style="font-size: 24px;height: 50vh; width: 33vh; margin-left: 1rem;padding-bottom: .5rem; border-radius:1rem; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
                 
-                <div class="scrollable-table" style="padding-bottom: 3rem; ">
+                <div class="scrollable-table" style="padding-bottom: 3rem; padding-top: 3rem;">
 
                 <nav style="border: unset; width: 100%;position: fixed; ">
                         <div class="col"><nav style=" background-color: rgba(0, 0, 0, 0.514);  margin-left: -2.5rem; padding-left: 1rem; border-top-left-radius: 1rem; width: 32.4vh; border-right: unset; ">watchlist</nav></div>
@@ -144,13 +149,7 @@
                         
                     </thead>
                     <tbody >
-                    <tr >
-                        {% if request.method == 'GET' %}
-                        {%for x in tableh%}
-                        <td id="watchheader"><strong>{{x}}</strong></td>
-                        {%endfor%}
-                        {% endif %}
-                    </tr>
+                    
                     {%for row in test%}
 
                     <tr >
@@ -197,8 +196,8 @@
                 </script>
 
                 
-                <div class="dropdown" style="position: absolute; border: 0px; background-color: #002142;">
-                    <button class="btn btn-secondary dropdown-toggle" id="dropdownbutton" style="position: sticky;color: rgb(100, 100, 100); border: 0px slategray; background-color: rgba(7,7,7,255)" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="dropdown" style="position: absolute; border: 0px; background-color: #0080ff00;">
+                    <button class="btn btn-secondary dropdown-toggle" id="dropdownbutton" style="position: sticky;color: rgb(100, 100, 100); border: 0px slategray; background-color: #0080ff00" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg"  width="28" height="28" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
                             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>  
@@ -235,7 +234,7 @@
             <div class="col-lg-12" id="chartarea" style="font-size: 24px;border: .2rem solid #0080FF; margin: 0 auto;"> 
                 
                 
-
+                
                 <strong style="color: #0080ffe3;">{{setgraphcoin}}</strong>
                 <select id="coords" style="display: none;">
                 </select>
@@ -291,7 +290,7 @@
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">SELL</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false" style="">Chat with AI</a>
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false" >Chat with AI</a>
                     </li>
                 </ul>
                 <nav></nav>
@@ -309,10 +308,10 @@
                         
                             
                             <form  method="POST" action="{{url_for('forummain')}}" style="border: rgb(77, 77, 77) 1px groove;width:80%; align-content: center; margin: 0 auto; border-top-style:unset; 
-                            color:rgb(44, 44, 44); border-bottom-style:unset; padding: 33px; border-radius: 0rem; grid:10%; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: medium;">
+                            color:rgb(44, 44, 44);  padding: 33px; border-radius: 0rem;  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: medium;">
                                 {{ newpurchase.csrf_token }}
                                 {{newpurchase.hidden_tag()}}
-                                <nav style="border-right: unset; color: rgba(77, 77, 77, 0.959);">
+                                <nav style="border-right: unset; color: rgba(77, 77, 77, 0.959); border-radius: 0%;">
                                 {{newpurchase.coin.label}}
                                 {{newpurchase.coin.data}}
                                 {{newpurchase.pricepercoin.label}}
@@ -464,7 +463,7 @@
             </div>
     </div>
     </div>
-    
+
 </body>
 
 

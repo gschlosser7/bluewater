@@ -17,9 +17,16 @@ nav
     border-left: unset;
     margin-left: 0rem;
     position: relative;
-
+    max-height: min-content;
     border-right: unset;
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+.table td {
+  width:  2px;
+  border: .1rem solid #0080ff3f;
+  border-collapse: collapse;
+  padding: 2px;
 }
 .dropdown{
   background-color: #9c242400;
@@ -91,7 +98,7 @@ body{
 #results{
   color: #11ff44;
   background-color: rgb(0, 0, 0);
-  border: 1px red solid;
+  border: .1rem #0080FF solid;
 }
 .dropdown {
   position: relative;
@@ -113,8 +120,8 @@ body{
     background-color: #000000;}
 }
 
-footer .col {
-    position: relative; /* or - absolute - */
+footer  {
+    position: absolute; /* or - absolute - */
     width: min-content;
     height: 60px;
     bottom: 0;
@@ -126,12 +133,17 @@ footer .col {
     
   }
 
-
+#totalcost{
+  visibility: hidden;
+}
 
 .table {
   font-size: smaller;
-  border: #000 2px;
-  
+  border: #b64040 2px;
+  margin-top: 2px;
+	font-family: Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	margin: Xpx 0;
   margin-top: 4rem;
 }
 .table tbody{
@@ -139,11 +151,10 @@ footer .col {
   border: #141414 2px solid;
   border-radius: 1rem;
   color: #0080FF;
-  
-  
-
 }
-
+#portfolioheader{
+  border: 1px #0080FF;
+}
 .table tbody tr{
     background-color: rgb(5, 5, 5);
     color: #0080FF;
@@ -151,6 +162,14 @@ footer .col {
     font-size: x-large;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-style: italic;
+}
+.table tbody td{
+  background-color: rgb(5, 5, 5);
+  color: #0080FF;
+  border-color: #141414b6;
+  font-size: x-large;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-style: italic;
 }
 #userPortfolio{
   background-color: rgb(10, 10, 10);
