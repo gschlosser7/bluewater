@@ -328,23 +328,24 @@
 
                                 
                                 
-                                <br>
                             
                         </form>
-                        <div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;"> total order cost:
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
+                            
                                 <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
                               
-                              <select id="priceper"></select>
-                    </div>
-                </svg><p id="mytotal" ></p>
+                                <select id="priceper"></select>
+                       
+                                <p id="mytotal"></p>
                         <script>
                             var priceperjs = document.getElementById('priceper'), jscalc={{priceper}};
                             document.getElementById('totalcost').style.visibility='hidden';
                         </script>
+                        <div id="dollarsvg" style="visibility: hidden;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
                             <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
-                          </svg><script id="realtimecalc" type="text/javascript">
+                          </svg>
+                        </div>
+                          <script id="realtimecalc" type="text/javascript">
                             document.getElementById('myid').addEventListener("change", function(event) {
                                 (function(event) {
                                     
@@ -358,8 +359,22 @@
                                 }).call(document.getElementById('myid'), event);
                                 
                                 document.getElementById('mytotal').style.color = "#0080FF";
-                                document.getElementById('mytotal').style.alignContent = "space-between";
-
+                                
+                                document.getElementById('mytotal').style.border = "1px #0080ffef solid";
+                                document.getElementById('mytotal').style.textAlign = "center";
+                                document.getElementById('mytotal').style.width = "17rem";
+                                document.getElementById('mytotal').style.borderRadius = ".5rem";
+                                
+                                document.getElementById('mytotal').style.fontFamily = "font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;";
+                                document.getElementById('dollarsvg').style.visibility = "visible";
+                                document.getElementById('mytotal').style.position = "absolute";
+                                
+                                document.getElementById('dollarsvg').style.marginLeft = "2rem";
+                                document.getElementById('dollarsvg').style.marginBottom = "10rem";
+                                document.getElementById('dollarsvg').style.paddingTop = "-10rem";
+                                document.getElementById('dollarsvg').style.color = "#0080FF";
+                                document.getElementById('dollarsvg').style.position = "absolute";
+                                document.getElementById('dollarsvg').style.zIndex = "3";
                                 e.preventDefault();
                                 
                                 });
@@ -392,10 +407,7 @@
                             
                         
                         <br>
-                        <form method="POST" action="/quantity" style="border: rgb(77, 77, 77) 1px groove;width:80%; align-content: center; margin: 0 auto; border-top-style:unset; 
-                            color:rgb(44, 44, 44);  padding: 33px; border-radius: 0rem; grid:10%; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
-                                
-                        </form>
+                        
                     </div>
                 </div>
                     
@@ -422,6 +434,7 @@
                                 <br>
                             
                         </form>
+                        <p id="sellerror" style="color: rgba(255, 0, 0, 0.952); visibility: hidden;">Error. Add this coin to your portfolio before trying to sell!</p>
                         <p id="totalCostSell2" >$</p>
                         
                         <script id="realtimecalcSell" type="text/javascript">
@@ -436,6 +449,7 @@
                                     } else {
                                         document.getElementById('sellbutton').style.visibility = "hidden"; 
                                     }
+
                                     
                                 }).call(document.getElementById('quantitySell'), event);
                                 
@@ -445,6 +459,7 @@
                                 e.preventDefault();
                                 
                                 });
+                            
                         </script>
                         
                     </div>
@@ -452,7 +467,29 @@
                         <script>
                             document.getElementById('profile-tab').style.setProperty='#&:hover{ color:black; }';
                             document.getElementById('profile-tab').style.color='#0080ffe3';
+                            document.getElementById('sellbutton').style.visibility='visible';
+                            
                         </script>
+                    {% else %}
+                    <script>
+                        document.getElementById('realtimecalcSell').style.visibility='hidden';
+                        document.getElementById('sellbutton').style.visibility='hidden';
+                        document.getElementById('quantitySell').addEventListener("change", function(event) {
+                            (function(event) {
+                                
+                                if (Number(realtimecalcSell) > 0){
+                                document.getElementById('sellerror').style.visibility = "visible"; 
+                                } 
+                                
+                                
+                            }).call(document.getElementById('quantitySell'), event);
+                            document.getElementById('sellerror').style.visibility = "visible";
+                            document.getElementById('totalCostSell2').style.visibility = "hidden";
+                            e.preventDefault();
+                            
+                            });
+
+                    </script>
                     {% endif %}
                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab" style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">Chat with AI</div>
                     
