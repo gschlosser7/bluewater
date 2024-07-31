@@ -10,7 +10,7 @@ from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 from sqlalchemy import inspect
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, SelectField, SelectMultipleField
-from wtforms.validators import DataRequired, EqualTo, Length
+from wtforms.validators import DataRequired, EqualTo, Length, Regexp
 from wtforms.widgets import TextArea
 from sqlalchemy import JSON, String, TypeDecorator
 from sqlalchemy.dialects.postgresql import JSONB
@@ -210,11 +210,11 @@ def load(userid):
     User.query.filter_by(username=username).first()'''
 
 class LoginForm(FlaskForm):
-    username = StringField('username', validators=[DataRequired()])
+    username = StringField('username', validators=[DataRequired(), Regexp(r'^[A-Za-z0-9@#$%^&+=]+$', message='invalid username')])
     password = PasswordField('password', validators=[DataRequired()])
     submit = SubmitField('submit')
 class registerForm(FlaskForm):
-    username= StringField('username', validators=[DataRequired()])
+    username= StringField('username', validators=[DataRequired(), Regexp(r'^[A-Za-z0-9@#$%^&+=]+$', message='invalid username')])
     password = PasswordField('password', validators=[DataRequired()])
     
 class commentForm(FlaskForm):
@@ -347,9 +347,9 @@ def logout():
     logout_user()
     return redirect(url_for('hmpg'))
 
-watch=[{}]
 
-@app.route('/forum', methods=['GET', 'POST'])
+watch=[{}]
+@app.route('/home', methods=['GET', 'POST'])
 @login_required
 def forummain():
 #emailform=emailForm()
@@ -391,10 +391,15 @@ def forummain():
                 print(e)'''
 #the above code is a static method of loading all coin names into DB for instant query purposes later
     
+    if str(watch)=='[{}]':
+        print('123\n123\n91023883213ej102i03\n-30123103')
+    else:
+        print('aaaaaaaaaaaaaaaaaaaaaaakkkkkkkkkkkkkkkkkkkkkkkkkkkkkrrrrrrrrrrrrrrrrrrrrrr')
     testing=coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains('bitcoin')).limit(5).all()
     print(testing)
-
+    
     watching=watch
+    print(watching, watch)
     #make watchlist the default ohlc pandas frames in server. user can add to list and trigger ohlc pandas frame post event to server... default=newdefault
     purchaseform=purchaseForm()
     newpurchase=newPurchase()
@@ -409,11 +414,8 @@ def forummain():
     lastapicall = lastAPICall2.query.first()
     
     if lastapicall:
-        print(lastapicall.timeposted,'1111111111111111111111111111111111111111111111')
         #lastapicall = lastapicall.timeposted.replace(tzinfo=datetime.UTC)
-        print('lower utc', datetime.datetime.now(datetime.timezone.utc))
         rightnow=datetime.datetime.now(tz=datetime.timezone.utc).timestamp()
-        
         print(lastapicall.timeposted+timedelta(minutes=1))
         lastapicallandtimedelta = lastapicall.timeposted+timedelta(minutes=1)
         lastapicallandtimedelta=lastapicallandtimedelta.timestamp()
@@ -791,7 +793,7 @@ def instasearch():
     print(coinsearch)
     if coinsearch:
         print('SEARCHING...')
-        results= coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains(coinsearch)).limit(100).all()
+        results= coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains(coinsearch)).limit(10).all()
         print('SEARCHING')
         for x in results:
             print(x)
@@ -944,6 +946,7 @@ def graphview(coin):
         return redirect(url_for('forummain'))
 
 @app.route('/editwatchlist', methods=['GET','POST'])
+@login_required
 def edit(watchlist):
     item=watch[watchlist]
     if request.method=='POST':
@@ -978,8 +981,6 @@ def register():
     form=registerForm()
  
     GOOGLE_VERIFY_URL='https://www.google.com/recaptcha/api/siteverify'
-    
-    print('reg post')
     
     if form.validate_on_submit():
         print('form validated')
@@ -1134,4 +1135,5 @@ application = DispatcherMiddleware(
 if __name__== '__main__':
     #dash.run(debug=True)
     app.run('0.0.0.0')
+    #using run_simple('0.0.0.0', 'application') in production working 7/22
     #maybe use a main() function for app above and call it here?
