@@ -329,6 +329,18 @@ def logout():
     logout_user()
     return redirect(url_for('hmpg'))
 
+@app.errorhandler(500)
+def internal_error(error):
+    time.sleep(60)
+    return "500 error"
+@app.errorhandler(429)
+def internal_error(error):
+    time.sleep(60)
+    return "429 error"
+@app.errorhandler(404)
+def internal_error(error):
+    time.sleep(60)
+    return "404 error"
 
 watch=[{}]
 @app.route('/home', methods=['GET', 'POST'])
@@ -793,7 +805,7 @@ def quantize():
             quantity = newpurchase.quantity.data
             totalcost = request.form.get('totalcost')
             print(coin, pricepercoin, quantity, totalcost)
-            return 'a'
+            return 'success'
 
 @app.route('/addtowatchlist', methods=['GET','POST'])
 @login_required
