@@ -34,9 +34,6 @@ import psycopg2 as pg
 import datetime
 from flask_htmx import HTMX
 import time as time
-#^something in this will fix the cannot import url_decode from werkzeug.urls error. 
-#oauth or something else for AAA
-#import hashlib or better hashing package
 
 loginmanager =  LoginManager()
 
@@ -70,13 +67,6 @@ htmx=HTMX(app)
 
 loginmanager.init_app(app)
 loginmanager.login_view='/'
-
-'''The class that you use to represent users needs to implement these properties and methods:is_authenticated
-    This property should return True if the user is authenticated, i.e. they have provided valid credentials. (Only authenticated users will fulfill the criteria of login_required.)is_active
-    This property should return True if this is an active user - in addition to being authenticated, they also have activated their account, not been suspended, or any condition your application has for rejecting an account. Inactive accounts may not log in (without being forced of course).is_anonymous
-    This property should return True if this is an anonymous user. (Actual users should return False instead.)get_id()
-    Ths method must return a str that uniquely identifies this user, and can be used to load the user from the user_loader callback. Note that this must be a str - if the ID is natively an int or some other type, you will need to convert it to str.
-'''
 
 with app.app_context():
     db.Session()
@@ -258,36 +248,34 @@ class nestedQuantityForm(FlaskForm):
     buy=SubmitField('BUY')#use submit buttons plural that auto update a "total" outside of the form
 
 
-print('77')
 app.app_context().push()
 with app.app_context():
 
     db.create_all() #create above tables, forms are there for convenience they aren't committed
-    print('78')
     db.session.commit()
-    print('79')
+
 
 @app.route('/', methods=['POST','GET'])
 def hmpg():
     form = LoginForm()
     
-    print('csrf')
+    
     if 'username' in session:
         return redirect(url_for('logout'))
     
     if form.username.data and form.validate_on_submit():
-        print('form validated')
+        
         usernameinput = str(form.username.data)
         user = User.query.filter_by(username=usernameinput).first()
         
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data)==True:
-                print('in here')
+                
                 flash('loggedin')
                 login_user(user)
                 session['username'] = usernameinput
                 if 'username' in session:
-                    print('aa')
+                    
                     return redirect(url_for('forummain'))
             else:
                 form=LoginForm(object=user)
@@ -311,7 +299,6 @@ def hmpg():
     except Exception as e:
         print(e, '@ req args get')
 
-    print('last')
     return render_template('home.html', form=form)
 
 @app.route('/submit', methods=['POST', 'GET'])
@@ -319,19 +306,14 @@ def submit():
     form=registerForm()
     GOOGLE_VERIFY_URL='https://www.google.com/recaptcha/api/siteverify'
     if request.method == ['POST']:
-        print('sub post')
         if form.validate_on_submit():
-            print('form val sub')
             username=str(form.username.data)
             password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            print(password)
             user=User(username, password)
             
             gsecret = request.form['g-recaptcha-response']
             gresponse=requests.post(url=f'{GOOGLE_VERIFY_URL}?=secret={GOOGLE_RECAPTCHA_SECRET_KEY}&response={gsecret}')
-            print(gresponse)
             if not gresponse['success'] or gresponse['score'] < 0.5:
-                print('fail')
                 
                 redirect(url_for('hmpg'))
             db.session.add(user)
@@ -342,7 +324,7 @@ def submit():
 @app.route('/logout')
 @login_required
 def logout():
-    # remove the username from the session if it's there
+    # remove the username from the session and use flask login to logout the user
     session.pop('username', None)
     logout_user()
     return redirect(url_for('hmpg'))
@@ -374,6 +356,8 @@ def forummain():
     #
     #coinGeckoCoinsList2.__tablename__.drop(create_engine)
     #rollback after the above
+
+
     '''cgheaders = {"Authorization": ACCESS_TOKEN, "accept": "application/json"}
     coinlisturl = "https://api.coingecko.com/api/v3/coins/list"
     
@@ -389,17 +373,10 @@ def forummain():
                 
             except Exception as e:
                 print(e)'''
-#the above code is a static method of loading all coin names into DB for instant query purposes later
+#the above code is a static method of loading all coin names into DB for instasearch purposes later
     
-    if str(watch)=='[{}]':
-        print('123\n123\n91023883213ej102i03\n-30123103')
-    else:
-        print('aaaaaaaaaaaaaaaaaaaaaaakkkkkkkkkkkkkkkkkkkkkkkkkkkkkrrrrrrrrrrrrrrrrrrrrrr')
-    testing=coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains('bitcoin')).limit(5).all()
-    print(testing)
     
     watching=watch
-    print(watching, watch)
     #make watchlist the default ohlc pandas frames in server. user can add to list and trigger ohlc pandas frame post event to server... default=newdefault
     purchaseform=purchaseForm()
     newpurchase=newPurchase()
@@ -413,13 +390,12 @@ def forummain():
     
     lastapicall = lastAPICall2.query.first()
     
+
     if lastapicall:
         #lastapicall = lastapicall.timeposted.replace(tzinfo=datetime.UTC)
         rightnow=datetime.datetime.now(tz=datetime.timezone.utc).timestamp()
-        print(lastapicall.timeposted+timedelta(minutes=1))
         lastapicallandtimedelta = lastapicall.timeposted+timedelta(minutes=1)
         lastapicallandtimedelta=lastapicallandtimedelta.timestamp()
-        print('123123123123', lastapicallandtimedelta)
         if rightnow > lastapicallandtimedelta:
             lastapicall.timeposted=datetime.datetime.now(datetime.timezone.utc)
             db.session.commit()
@@ -448,12 +424,10 @@ def forummain():
             topPageHoldsView.append(coin)
             #newsell.coindrop.choices.append(tuple((coin, coin)))
             
-            print('new SELL', newsell.coindrop.data)
             for x in vals:
                 
                 topPageHoldsView.append((round(float(x),3)))
             
-            print(topPageHoldsView,'TPV')
     
     else:
         makeValue='$1000000.00'
@@ -465,7 +439,6 @@ def forummain():
 
     try:
         if watchlist.coinBeingViewed:
-            print(watchlist.coinBeingViewed)
             #coinOptions.append(watchlist.coinBeingViewed)
             setgraphcoin=watchlist.coinBeingViewed #change graph data to data of coin user just clicked on
             setPurchaseFormCoin=watchlist.coinBeingViewed #change green highlighted 'coin' text in newpurchase
@@ -476,7 +449,6 @@ def forummain():
             error=''
             
         else:
-            print('made it')
             watchlist.coinBeingViewed='bitcoin' 
             db.session.commit()
             setPurchaseFormCoin=watchlist.coinBeingViewed
@@ -508,7 +480,6 @@ def forummain():
         i+=1
 
     ycoords=list(chartdata.values())
-    print('clist,yscoords here, sma9=clist[::9], go backwards adding each 9 days before the current date( x value) and calc the total/9days. store these in database in poppable format?')
     xcoords=list(chartdata.keys())
     priceper=ycoords[((len(ycoords)-1))]
     #print(len(ycoords), len(clist))
@@ -527,16 +498,14 @@ def forummain():
             mystr=''
             loadwatchlist=json.loads(watchlistcoins.coin)
             for x in loadwatchlist:
-                print(x)
+                
                 mystr=mystr+''.join('%2C'+ x)
-                print(mystr)
+                
         except:
             mystr=''.join('%2C'+ watchlistcoins.coin)
         furl = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Csolana%2Chex%2Ctether"+mystr+"&vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=0"
-        print('1',furl)
         url=furl
     #url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cchainlink%2Csolana%2Chex%2Ctether&vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=0"
-    print('url=',url)
     #https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum&vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=0
     #https://api.coingecko.com/api/v3/simple/price?ids=${str}&vs_currencies=usd
     #GET RID OF RAW URLs
@@ -560,9 +529,7 @@ def forummain():
             return render_template('forum.html', watch=watch, tableh=tableh, test=cointlist, clist=clist, ycoords=ycoords, ohlc=ohlc, purchaseform=purchaseform, newmessage=newmessage)
         newpurchase.quantity.choices=[(None,''),('10','10'),('100','100'),('1000','1000')]
         qChoices=newpurchase.quantity.choices
-        print(newpurchase.quantity.data,newpurchase.coin.data, newpurchase.totalcost.render_kw, newpurchase.pricepercoin.raw_data,'p[[pp[p[pppp[]]]]]')
         if newpurchase.buy.data and newpurchase.validate_on_submit():
-            print('383')
             userVal=userAccountValue.query.filter_by(accountHolder=session['username']).first()
           
             qChoices=newpurchase.quantity.choices
@@ -570,7 +537,6 @@ def forummain():
             newpurchase.pricepercoin.data = ycoords[(len(ycoords)-1)]
             quantity = request.form.get('quantity')
             totalcost = str(newpurchase.pricepercoin.data * float(quantity))
-            print(coin, quantity, totalcost, newpurchase.pricepercoin.data, '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
             
             empty={str(coin):(str(quantity), str(newpurchase.pricepercoin.data))} #transaction seen here. this will serve order history and the timeofpurchase value of coin
             #userAccountValue portfolioValue coinHoldings accountHolder transactions
@@ -580,7 +546,6 @@ def forummain():
             
             empty=json.dumps(empty)
            
-            print(empty,'emptyemptyempty')
             #order=userVal.transactions
             #order+=empty
         
@@ -592,9 +557,7 @@ def forummain():
                 portVal=userVal.portfolioValue
                 portVal=float(portVal)
                 
-                print(portVal, 'portval')
                 db.session.commit()
-                print(userVal.coinHoldings,'  14141414')
                 
                 loadHolds=json.loads((userVal.coinHoldings))
                 #loadHolds=loadHolds.keys()
@@ -602,25 +565,20 @@ def forummain():
                 
                 if coin in loadHolds:
                     #add to the coins dict values of quantity and priceper
-                    print('IN KEYS .............................')
                     
                     coinVals= loadHolds.get(coin) #THE PROBLEM IS HERE
                     #THE COINHOLDINGS REPLACE VALUES AFTER THE INITIAL POST ISNT WORKING
                     #{"solana": [140.0, 12.681571428571429]}
                     #{"chainlink": ["17.66", "1000"],"ethereum": ["10", "3776.15"]}
 
-                    print(coinVals)
-                    print(float(totalcost),'floatalcost', float(coinVals[0]),float(coinVals[1]) )
                     roundedNum2 = float(coinVals[0]) + float(quantity) 
                     roundedNum1 = (float(coinVals[1])*float(coinVals[0])) + float(totalcost) 
-                    print(roundedNum2, roundedNum1, 'r1r2---------')
                     
                     roundedNum2=round(roundedNum2, 5)
                     roundedNum1=round(roundedNum1, 5)
                     
                     empty={str(coin):(str(float(roundedNum1)/float(roundedNum2)), roundedNum2,roundedNum1)}
                     loadHolds[coin]=[str(roundedNum2), str(float(roundedNum1)/float(roundedNum2))]
-                    print(loadHolds,'replaceholdingvals')
                     
                     
                     userVal.coinHoldings=json.dumps(loadHolds) #coin is being detected  for multiCoin but only posts the  detected coin instead of keeping both
@@ -632,7 +590,6 @@ def forummain():
                 else:
                     addHold={str(coin):(quantity, str(float(totalcost)/float(quantity)))}
                     loadHolds[coin]=[quantity, str(float(totalcost)/float(quantity))]
-                    print(loadHolds)
                     
                     userVal.coinHoldings=json.dumps(loadHolds)
                     userVal.portfolioValue=float(userVal.portfolioValue) - float(totalcost)
@@ -642,11 +599,9 @@ def forummain():
                     return redirect(url_for('forummain'))
             
             else:
-                print(float(totalcost), totalcost)
                 portVal=float(1000000.00)-float(totalcost)
                 portVal=round(portVal, 3)
                 portVal=str(portVal)
-                print(portVal, 'portVal ##############')
                 #userVal.transations=fullOrder
                 #db.session.commit()
                 newUserPurchaseRow=userAccountValue(portfolioValue=portVal, coinHoldings=empty, accountHolder=session['username'], transations=fullOrder)
@@ -658,10 +613,7 @@ def forummain():
         
         if newsell.sell.data and newsell.validate_on_submit():
             coindrop=newsell.coindrop.data
-            print(coindrop, newsell.quantitySell.data, newsell.pricepercoinSell.data, newsell.pricepercoinSell.raw_data)
-            print('in theorruyyyyyy ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
             if coindrop in showHoldings:
-                print(coindrop, showHoldings)
                 amountSold = float(newsell.quantitySell.data)
                 currVals = showHoldings[coindrop]
                 quantity=float(currVals[0]) - abs(float(newsell.quantitySell.data)) 
@@ -670,9 +622,7 @@ def forummain():
                 try:
                     newAvg=holdingValue/quantity
                     quantity=str(quantity)
-                    print(str((coindrop, quantity, newAvg)))
                     showHoldings[coindrop]=(str(quantity), str(newAvg))
-                    print(showHoldings, '22222222222222222222222222222')
                     getValue.coinHoldings=json.dumps(showHoldings)
                     getValue.portfolioValue=float(getValue.portfolioValue) + (amountSold*float(ycoords[((len(ycoords)-1))]))
 
@@ -680,7 +630,6 @@ def forummain():
                     return redirect(url_for('forummain'))
                 except:
                     if quantity <= 0: #this is hit if the user sells the whole stack
-                        print('bong')
                         showHoldings.pop(coindrop)
                         getValue.coinHoldings=json.dumps(showHoldings)
                         if showHoldings=='{}':
@@ -696,13 +645,10 @@ def forummain():
                         db.session.commit()
                     return redirect(url_for('forummain'))
             else:
-                print('noadsijaiqsjdi')
                 return 'adas'
             
 
     elif request.method=='GET':
-        print((response.text), 'response text')
-        print(response, current_user)
         new = json.loads(response.text)
         
         cointlist=[]
@@ -712,37 +658,26 @@ def forummain():
         #make cointlist[::-1] column in new table that newpurchase form can get currentView price info from
         for i, v in enumerate(new):
             i = new[v]
-            print('i', i)
             for j, b in enumerate(i):
                 j = i[b]
-                print('v,j', v, j)
                 buttonlist.append(v)
                 cointlist+=[(v,j)]
-        print(cointlist, buttonlist)
         for x in cointlist:
             try:
                 if x[0] == currentView.query.filter_by(curr_user=str(session['username'])).first().coinBeingViewed:
                     newpurchase.pricepercoin.data=ycoords[((len(ycoords)-1))]
                     priceper=int(newpurchase.pricepercoin.data)
-                    print('77')
-                    print(priceper)
             except:
-                print('778')
                 errorCoin=currentView(curr_user=session['username'], coinBeingViewed='bitcoin')
                 db.session.add(errorCoin)
                 db.session.commit()
-                print('88')
                 return redirect(url_for('forummain'))
     try:   
         for x in cointlist:
             if x[0] == currentView.query.filter_by(curr_user=session['username']).first().coinBeingViewed:
-                print('893')
-                print(newpurchase.pricepercoin.data)
                 newpurchase.pricepercoin.data=ycoords[((len(ycoords)-1))]
                 priceper=float(newpurchase.pricepercoin.data)
                 newsell.pricepercoinSell.data=priceper
-                print(newpurchase.coin.data, priceper)
-                print('add try except HERE BECAUSE THE THING ISNT GETTING THE PURCHASEFORM COIN PRICEPER DATA. MAYBE CONVERT WATCHLIST TO OHLC PRICE DATA')
                 
                 
                 #make x[1] the price field in the purchase form
@@ -786,33 +721,23 @@ def forummain():
 @app.route('/search', methods=['GET','POST'])
 @login_required
 def instasearch():
-    print('here')
     coinsearch = request.args.get('q')
     #clist = json.loads(coinGeckoCoinsList3.coin)
     #rint(clist)
-    print(coinsearch)
     if coinsearch:
-        print('SEARCHING...')
         results= coinGeckoCoinsList3.query.filter(coinGeckoCoinsList3.coin.icontains(coinsearch)).limit(10).all()
-        print('SEARCHING')
         for x in results:
-            print(x)
             try:
-                print('trying coin search upper on x at this point')
                 coinsearch=coinsearch.upper()
                 try:
-                    print('ec test')
                     ec=json.loads(x.coin)
-                    print('ec is json loaded x.coin')
                     if len(coinsearch)>1:
-                        print('it does')
                         grabname = ec.pop('name')
                         results.append(grabname)
                 except Exception as e:
                     print(e)
                 try:
                     ec=x.coin
-                    print(ec, ' this is the raw ec output from results')
                     results.append(ec)
                 except Exception as e:
                     print(e)
@@ -840,12 +765,9 @@ def instasearch():
     results2=[]
     for y in results:
         if type(y)==str:
-            print(y,'passed')
             results2.append(y)
         else:
             results.remove(y)
-    print(results[::-1])
-    print(results2)
     if htmx:
         return render_template('coinsearch.html', results=results2)
     return render_template('coinsearch.html', results=results2)
@@ -853,11 +775,9 @@ def instasearch():
 @app.route('/quantity', methods=['GET','POST'])
 @login_required
 def quantize():
-    print('quantizinated')
     newpurchase=newPurchase(request.form)
     
     if request.method=='POST':
-        print('quantity check')
         #getjason=request.get_json(force=True)
         #print(getjason['coin'])
 
@@ -867,8 +787,6 @@ def quantize():
         qshow=request.form['qform']
         totalcost = request.form.get('mytotal')
         empty=''
-        print(qshow)        
-        print( type(coin),coin,type(quantity),quantity, type(pricepercoin), pricepercoin, totalcost )
         if newpurchase.validate_on_submit():
             coin = newpurchase.coin.data
             pricepercoin = newpurchase.pricepercoin.data
@@ -884,14 +802,11 @@ def add():
     if request.method=='POST':
         #preselected = coinGeckoCoinsList3.query.filter_by(cgcoin=)
         curruser = session['username']
-        print(curruser, 'curr')
         item = request.form['watch']
-        print(item)
         try:
             if coinGeckoCoinsList3.query.filter_by(coin=item):
                 currlist=userCoinlist.query.filter_by(curruser=session['username']).first()
                 #currlist2=db.session.execute(db.select(userCoinlist).order_by(userCoinlist.curruser)).scalars()
-                print(currlist, 'currlist')
                 watch.append({'watch':item, 'removed':False})
                 if currlist:
                 #currlist=json.dumps(currlist)
@@ -899,8 +814,6 @@ def add():
                     try:
                         addWatch=json.loads(currlist.coin)
                         addWatch[item]='True'
-                        print(addWatch)
-                        print('watchlist updated')
                         currlist.coin=json.dumps(addWatch)
                         db.session.commit()
                      
@@ -908,16 +821,13 @@ def add():
                         addWatch={}
                         addWatch[item]='True'
                         currlist.coin=json.dumps(addWatch)
-                        print('watchlist updated 2')
                         db.session.commit()
                     
-                    print(currlist,'71233123')
                 #print(json.dumps(watch))
                 #jsondumpswatch=json.dumps(watch)
                 #currlist=currlist+jsondumpswatch
                 #currlist=json.dumps(currlist)
                 else:
-                    print('8')
                     item={str(item):'True'}
                     item=json.dumps(item)
                     newcoin=userCoinlist(curruser, item)
@@ -939,7 +849,6 @@ def graphview(coin):
             db.session.commit()
         else:
         #make db table current_view for clickable watchlist
-            print(coin, curr_user)
             coinToGraph=currentView(curr_user, coin)
             db.session.add(coinToGraph)
             db.session.commit()
@@ -983,18 +892,14 @@ def register():
     GOOGLE_VERIFY_URL='https://www.google.com/recaptcha/api/siteverify'
     
     if form.validate_on_submit():
-        print('form validated')
         username=str(form.username.data)
         password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        print(password)
         user=User(username, password)
         
         gsecret = request.form['g-recaptcha-response']
         gresponse=requests.post(url=f'{GOOGLE_VERIFY_URL}?secret={GOOGLE_RECAPTCHA_SECRET_KEY}&response={gsecret}').json()
         
-        print(gresponse)
         if not gresponse['success'] or gresponse['score'] < 0.5:
-            print('fail')
             
             redirect(url_for('hmpg'))
         db.session.add(user)
@@ -1016,10 +921,7 @@ def profile():
     #GET RID OF RAW URLs
     headers = {"Authorization": ACCESS_TOKEN, "accept": "application/json"}
     response = requests.get(url, headers=headers)
-    print(response,'33')
     if request.method=='GET':
-        print((response.text))
-        print(response, current_user)
         new = json.loads(response.text)
         
         cointlist=[]
@@ -1027,7 +929,6 @@ def profile():
             i = new[v]
             for j, b in enumerate(i):
                 j = i[b]
-                print(v, j)
                 cointlist+=[(v,j)]
                 #create list of tuples(coinid, price_in_usd)
                 #return said list of tuples as test, seen below    
@@ -1039,10 +940,7 @@ def profile():
 @login_required
 def addComment():
     form=commentForm()
-    print(session['username'])
-    print(form.username.raw_data, form.content.raw_data, form.slug.data)
-    
-    print('this far')
+
     if form.validate_on_submit():
         comment=Comments(user=form.username.data, content=form.content.data, slug=form.slug.data)
         #user = User.query.filter_by(username=form.username.data).first()
@@ -1056,9 +954,7 @@ def addComment():
 
 @app.route('/chart', methods=['POST', 'GET']) 
 def render_dashboard():
-    print('12313123123213')
     if 'username' in session:
-        print(session['username'])
         return redirect('/pathname')
     return redirect(url_for('logout'))
 #@server.route('/app1')
