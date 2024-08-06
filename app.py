@@ -329,18 +329,6 @@ def logout():
     logout_user()
     return redirect(url_for('hmpg'))
 
-@app.errorhandler(500)
-def internal_error(error):
-    time.sleep(60)
-    return "500 error"
-@app.errorhandler(429)
-def internal_error(error):
-    time.sleep(60)
-    return "429 error"
-@app.errorhandler(404)
-def internal_error(error):
-    time.sleep(60)
-    return "404 error"
 
 watch=[{}]
 @app.route('/home', methods=['GET', 'POST'])
@@ -730,6 +718,20 @@ def forummain():
     if htmx:
         return render_template('coinsearch.html')
     return render_template('forum.html', tablew=tablew, newsell=newsell, topPageHoldsView=topPageHoldsView, makeValue=makeValue, priceper=priceper, setgraphcoin=setgraphcoin,newpurchase=newpurchase, NestedQuantityForm=NestedQuantityForm,error=error, buttonlist=buttonlist, watch=watching, tableh=tableh, test=cointlist, clist=clist, ycoords=ycoords, ohlc=ohlc, purchaseform=purchaseform, newmessage=newmessage)
+
+@app.errorhandler(500)
+def internal_error(error):
+    time.sleep(60)
+    return "500 error"
+@app.api_error(429)
+def internal_error(error):
+    time.sleep(60)
+    return "429 error"
+@app.errorhandler(404)
+def not_found(error):
+    time.sleep(60)
+    return "404 error"
+
 @app.route('/search', methods=['GET','POST'])
 @login_required
 def instasearch():
