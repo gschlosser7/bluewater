@@ -723,8 +723,8 @@ def forummain():
 def internal_error(error):
     time.sleep(60)
     return "500 error"
-@app.api_error(429)
-def internal_error(error):
+@app.errorhandler(429)
+def api_error(error):
     time.sleep(60)
     return "429 error"
 @app.errorhandler(404)
