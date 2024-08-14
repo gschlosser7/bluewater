@@ -6,4 +6,4 @@ bluewater provides these tools:
 * a simple paper trading interface
 * AI chatbot
 
-![alt text](https://i.imgur.com/IhZCiwh.png)
+![alt text](https://i.imgur.com/PPOOgSy.png)
