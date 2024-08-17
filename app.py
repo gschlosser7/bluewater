@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request, jsonify, Request, render_template_string, session, flash
+from flask import Flask, render_template, url_for, redirect, request, jsonify, Request, render_template_string, session, flash, make_response
 import flask
 import requests, json
 from flask_login import LoginManager, UserMixin, current_user, login_required, login_user, logout_user
@@ -8,7 +8,8 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 from sqlalchemy import inspect
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, CSRFProtect
+from flask_wtf.csrf import generate_csrf
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, EqualTo, Length, Regexp
 from wtforms.widgets import TextArea
@@ -64,9 +65,11 @@ bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 migrate=Migrate(app,db, command='migrate', compare_type=True) # think this was alr fixed because migrate isnt used anymore but idk leaving this just in case
 htmx=HTMX(app)
+csrf = CSRFProtect(app)
 
 loginmanager.init_app(app)
 loginmanager.login_view='/'
+csrf.init_app(app)
 
 with app.app_context():
     db.Session()
@@ -654,7 +657,7 @@ def forummain():
         cointlist=[]
         buttonlist=[]
         tableh=['coin', 'price']
-        tablew=['coin','quantity','avg. cost']
+        tablew=['coin','quantity','average']
         #make cointlist[::-1] column in new table that newpurchase form can get currentView price info from
         for i, v in enumerate(new):
             i = new[v]
