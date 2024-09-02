@@ -8,7 +8,7 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 from sqlalchemy import inspect
-from flask_wtf import FlaskForm, CSRFProtect
+from flask_wtf import FlaskForm, CSRFProtect, csrf
 from flask_wtf.csrf import generate_csrf
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, EqualTo, Length, Regexp
@@ -35,6 +35,9 @@ import psycopg2 as pg
 import datetime
 from flask_htmx import HTMX
 import time as time
+from flask_cors import CORS, cross_origin
+import logging
+import secrets
 
 loginmanager =  LoginManager()
 
@@ -47,15 +50,19 @@ app = flask.Flask(__name__, template_folder='./Templates', instance_relative_con
 #dash = Dash(__name__)
 htmx=HTMX()
 
+logging.basicConfig(filename='record.log', level=logging.DEBUG)
 #class Config:
 #reminder: will have to set environ vars on web server machine
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 #pass pgpass.conf, wherever that is, instead of raw pass
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') #'secretkey'
 app.config["SESSION_COOKIE_SECURE"] = True
-app.config["SESSION_COOKIE_SAMESITE"] = 'Lax'
+app.config["SESSION_COOKIE_SAMESITE"] = 'None'
 app.config["DEBUG"] = True
 app.config["SEND_FILE_MAX_AGE_DEFAULT"]= 0
+app.config['CORS_HEADERS'] = ['application/json', 'xml']
+logging.getLogger('flask_cors').level = logging.DEBUG
+
 #SESSION_COOKIE_SECURE and REMEMBER_COOKIE_SECURE = True
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 GOOGLE_RECAPTCHA_SITE_KEY=os.getenv('GOOGLE_RECAPTCHA_SITE_KEY')
@@ -66,6 +73,8 @@ db = SQLAlchemy(app)
 migrate=Migrate(app,db, command='migrate', compare_type=True) # think this was alr fixed because migrate isnt used anymore but idk leaving this just in case
 htmx=HTMX(app)
 csrf = CSRFProtect(app)
+CORS(app, origins="http://127.0.0.1:3000",resources={r"/*": {"origins": "http://localhost:3000"}}, allow_headers={'X-XSRF-Token', 'X-CSRFToken','x-csrftoken'}, headers=['Content-Type', 'Authorization'])
+
 
 loginmanager.init_app(app)
 loginmanager.login_view='/'
@@ -104,7 +113,10 @@ class User(db.Model, UserMixin):
     @property
     def is_authenticated(self):
         return True
-
+class UsersReact(db.Model):
+    id=db.Column(db.Integer(), primary_key=True)
+    reactuser=db.Column(db.String(255), unique=True)
+    testpw=db.Column(db.String(255))
 class Comments(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer(), primary_key=True)
@@ -257,21 +269,104 @@ with app.app_context():
     db.create_all() #create above tables, forms are there for convenience they aren't committed
     db.session.commit()
 
-
-@app.route('/', methods=['POST','GET'])
+@app.route('/csrf', methods=['POST', 'GET'])
+@cross_origin(support_credentials=True, origin='http://127.0.0.1:3000/')
+def usertoken():
+    print("sa")
+    
+    csrf_token = secrets.token_urlsafe(32)
+    session['csrf_token'] = csrf_token
+    #response = jsonify(detail="success")
+    print('--------------------------------')
+    #response1=response.headers.set("X-CSRFToken", generate_csrf())
+    print(csrf_token)
+    print('$$$$$$$$$$$$$csrf ^-v session$$$$$$$$$$$$$$$$$$$$')
+    print(session)
+    print('$$$$$$$$$$$$$session ^-v request headers $$$$$$$$$$$$$$$$$$$$')
+    try:
+        reqhed = str(request.headers['Cookie'])
+        
+        print(json.loads(reqhed), 'request headers')
+        
+    except:
+        #print('awawwawwaa' , request.headers)
+        myx = request.headers #['Cookie']
+        print('myxxxxxx')
+        
+    print('--------------------------------')
+    response = make_response(render_template('csrf_pass.html', csrf_token=csrf_token))
+    response.set_cookie(key='csrf_token', value=csrf_token, secure=True, httponly=True)
+    response.headers.set("X-CSRFToken", generate_csrf())
+    #response.set_cookie('csrf_token', generate_csrf(), httponly=False, secure=True)  # Set secure and httponly flags
+    
+    #if request.method == 'POST':
+        #if not csrf.f
+    #print(response.data)
+    return response
+#X-CSRFToken in header after get request. might be the one needed
+@app.route('/loggingin', methods=['POST','GET'])
+@cross_origin(support_credentials=True, origin='http://127.0.0.1:3000/')
 def hmpg():
+    
     form = LoginForm()
+    print('test')
+    #app.logger.debug("debug log info")
+    #app.logger.info("Info log information")
+    #app.logger.warning("Warning log info")
+    #app.logger.error("Error log info")
+    #app.logger.critical("Critical log info")
+    '''if request.method == 'GET':
+        print("they're trying to get something")
+        response = jsonify(detail="success")
+        response.headers.set("X-CSRFToken", generate_csrf())
+        response1=response.headers.set("X-CSRFToken", generate_csrf())
+        response.set_cookie('csrf_token', generate_csrf(), httponly=True, secure=True)  # Set secure and httponly flags
     
+        return response'''
+    #session.clear()
+    try:
+        xq = request.data
+        xq = json.loads(xq)
+        print(xq['username'], request.content_type)
+        try:
+            usernameinput=xq['username']
+        except Exception as e:
+            print(e)
+        
+        #form.data.username == json.loads(x)
+        
+        
+    except Exception as e:
+        
+        print(e)
     
+
     if 'username' in session:
         return redirect(url_for('logout'))
+    #print(request.headers)
     
-    if form.username.data and form.validate_on_submit():
+    if form.validate_on_submit():
         
-        usernameinput = str(form.username.data)
-        user = User.query.filter_by(username=usernameinput).first()
+        
+        '''try:
+            usernameinput = str(form.username.data)
+        except Exception as e:
+            print(e)'''
+        #flash('ak')
+        #usernameinput = xq['username']
+        print(usernameinput, '1234')
+        
+        try:
+            user = User.query.filter_by(username=usernameinput).first()
+            print(user)
+            
+        except Exception as e:
+            print(e)
+       
         
         if user:
+            #csrftoken = request.cookies.get('csrf_token')
+            
             if bcrypt.check_password_hash(user.password, form.password.data)==True:
                 
                 flash('loggedin')
@@ -288,7 +383,7 @@ def hmpg():
                 except: 
                     return flash('login failed') 
 
-    try:
+    '''try:
         print(request.form['homeForm'])
         
     except Exception as e:
@@ -300,7 +395,7 @@ def hmpg():
     try:
         print(request.args.get('homeForm'))
     except Exception as e:
-        print(e, '@ req args get')
+        print(e, '@ req args get')'''
 
     return render_template('home.html', form=form)
 
