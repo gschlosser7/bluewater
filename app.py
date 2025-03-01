@@ -293,9 +293,9 @@ def hmpg():
                 form=LoginForm(object=user)
                 try: 
                     if bcrypt.check_password_hash(user.password, form.password.data):
-                        return flash('login failed') 
+                        return redirect(url_for('hmpg')) 
                 except: 
-                    return flash('login failed') 
+                    return redirect(url_for('hmpg'))
 
     try:
         print(request.form['homeForm'])
